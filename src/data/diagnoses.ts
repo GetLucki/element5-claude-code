@@ -4,6 +4,8 @@ export interface DiagnosisScenario {
   id: DiagnosisId;
   name: string;
   tcmName: string;
+  /** Short explanation of what this TCM status means for the info popup */
+  statusExplanation: string;
   subtitle: string;
   description: string;
   tcmExplanation: string;
@@ -24,6 +26,7 @@ export const SCENARIOS: Record<DiagnosisId, DiagnosisScenario> = {
     id: "low-energy",
     name: "Energiunderskott",
     tcmName: "Qi-brist (气虚)",
+    statusExplanation: "Qi är kroppens livskraft och energi. Vid Qi-brist har kroppen svårt att producera tillräckligt med energi för dagliga funktioner. Det leder till trötthet, svag aptit och minskad motståndskraft.",
     subtitle: "Din livskraft behöver stärkas",
     description: "Enligt TCM har din Qi — kroppens livskraft — försvagats. Det innebär att din Mjälte och Mage inte omvandlar näring till energi tillräckligt effektivt.",
     tcmExplanation: "I traditionell kinesisk medicin är Qi den grundläggande energin som driver alla kroppsfunktioner. Vid Qi-brist prioriterar kroppen de mest livsviktiga organen, vilket leder till trötthet, dålig aptit och svag muskeltonus. Tungan blir blek och svullen med tandmärken — ett klassiskt tecken på att Mjälten behöver stöd.",
@@ -55,6 +58,7 @@ export const SCENARIOS: Record<DiagnosisId, DiagnosisScenario> = {
     id: "metabolic",
     name: "Trög metabolism",
     tcmName: "Fukt & Slem (湿痰)",
+    statusExplanation: "Fukt och Slem uppstår när kroppen inte kan omsätta vätskor effektivt. Det leder till en känsla av tyngd, uppblåsthet, slembildning och 'hjärndimma'. Mjälten behöver stöd för att dränera och transformera.",
     subtitle: "Kroppen behöver renas och flödet återställas",
     description: "Enligt TCM har Fukt (Shi) och Slem (Tan) ackumulerats i kroppen, vilket bromsar din metabolism och skapar en känsla av tyngd och dimma.",
     tcmExplanation: "I TCM uppstår Fukt när Mjälten inte kan transformera vätskor tillräckligt effektivt. Fukten kan förtätas till Slem som blockerar meridianer och organ. Tungan blir svullen med tjock, klibbig beläggning — kroppens sätt att visa att den behöver hjälp med att dränera och transformera.",
@@ -86,6 +90,7 @@ export const SCENARIOS: Record<DiagnosisId, DiagnosisScenario> = {
     id: "inner-stress",
     name: "Inre obalans",
     tcmName: "Yin-brist med Tomhetsvärme (阴虚内热)",
+    statusExplanation: "Yin är kroppens kylande, lugnande kraft. Vid Yin-brist tappar kroppen förmågan att kyla ner och lugna sig, vilket skapar inre oro, ytlig sömn och en känsla av att 'glöda inifrån'. Tomhetsvärme är den falska värme som uppstår när Yin inte kan balansera Yang.",
     subtitle: "Ditt nervsystem behöver näring och svalka",
     description: "Enligt TCM har din Yin — kroppens lugnande, kylande och närande kraft — förbrukats, vilket låter värme och oro bubbla upp till ytan.",
     tcmExplanation: "Yin och Yang är livets två grundkrafter. Yin står för vila, stillhet, fukt och svalka. När Yin är försvagat förlorar kroppen förmågan att kyla ner och lugna sig. Tungan blir röd och torr, ofta med sprickor — som en uttorkad sjöbädd. Resultatet är ytlig sömn, inre oro och en känsla av att 'glöda inifrån'.",
@@ -117,6 +122,7 @@ export const SCENARIOS: Record<DiagnosisId, DiagnosisScenario> = {
     id: "tension",
     name: "Spänningar & stelhet",
     tcmName: "Qi- och Blodstagnation (气滞血瘀)",
+    statusExplanation: "Qi och Blod ska flöda fritt genom kroppen. Vid stagnation har flödet blockerats — ofta av stress, stillasittande eller undertryckta känslor. Resultatet är smärta, spänningar och irritabilitet. 'Smärta = blockering' är en grundprincip i TCM.",
     subtitle: "Energin och blodet har fastnat",
     description: "Enligt TCM har flödet av Qi och Blod stagnerat, vilket skapar spänningar, smärta och irritabilitet. Kroppen behöver rörelse och fri passage.",
     tcmExplanation: "Qi ska flöda fritt genom kroppens meridianer — som vatten i en å. När Qi stagnerar, ofta på grund av stress eller stillasittande, följer Blodstagnation. Resultatet är smärta ('smärta = blockering' säger TCM), huvudvärk och emotionell frustration. Tungan kan bli lila eller mörk med synliga sublinguala vener.",
@@ -148,6 +154,7 @@ export const SCENARIOS: Record<DiagnosisId, DiagnosisScenario> = {
     id: "cold-circulation",
     name: "Svag cirkulation",
     tcmName: "Yang-brist med inre Kyla (阳虚内寒)",
+    statusExplanation: "Yang är kroppens värmande, aktiverande kraft. Vid Yang-brist orkar kroppen inte värma sina yttre delar och cirkulationen försämras. Kalla händer och fötter, blekhet och morgontrötthet är typiska tecken. Njurarna anses vara källan till Yang.",
     subtitle: "Kroppens inre eld behöver stärkas",
     description: "Enligt TCM är din Yang — kroppens värmande, aktiverande kraft — försvagad. Det gör att Kyla tar över och cirkulationen försämras, särskilt till händer och fötter.",
     tcmExplanation: "Yang är livets eld: den värmer, aktiverar och driver blodcirkulationen. Vid Yang-brist orkar kroppen inte värma sina yttre delar. Tungan blir blek, våt och svullen — som en vattenloggad svamp. Njurarna anses i TCM vara källan till Yang, och behöver extra stöd.",

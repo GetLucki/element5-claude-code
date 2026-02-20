@@ -3,6 +3,7 @@ import { useAuth } from "@/context/AuthContext";
 import { useNavigate } from "react-router-dom";
 import { UtensilsCrossed, Pill, Snowflake, CalendarClock, CheckCircle2, Circle, Dumbbell, Moon, ShieldAlert, Heart } from "lucide-react";
 import TcmTerm from "@/components/TcmTerm";
+import TcmRichText from "@/components/TcmRichText";
 import { motion } from "framer-motion";
 import { differenceInDays } from "date-fns";
 
@@ -63,7 +64,9 @@ const PlanPage = () => {
               <h3 className="font-semibold">Kost — Mat som Medicin</h3>
             </div>
             {diagnosis.food.tcmNote && (
-              <p className="mb-3 text-sm text-muted-foreground italic border-l-2 border-secondary/30 pl-3">{diagnosis.food.tcmNote}</p>
+              <p className="mb-3 text-sm text-muted-foreground italic border-l-2 border-secondary/30 pl-3">
+                <TcmRichText text={diagnosis.food.tcmNote} />
+              </p>
             )}
         <div className="mb-3">
           <p className="mb-1 text-xs font-semibold uppercase tracking-wider text-success">Ät mer av</p>
