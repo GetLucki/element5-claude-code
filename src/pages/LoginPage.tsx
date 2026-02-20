@@ -40,7 +40,7 @@ const LoginPage = () => {
 
   return (
     <div className="relative flex min-h-screen flex-col items-center justify-center overflow-hidden">
-      <video autoPlay loop muted playsInline className="absolute inset-0 h-full w-full object-cover">
+      <video autoPlay loop muted playsInline className="absolute inset-0 h-full w-full object-cover" style={{ objectPosition: '70% center' }}>
         <source src={loginBgVideo} type="video/mp4" />
       </video>
 
