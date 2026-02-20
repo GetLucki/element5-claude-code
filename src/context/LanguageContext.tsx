@@ -25,14 +25,14 @@ const TRANSLATIONS: Record<Locale, Record<string, string>> = { sv, en, zh };
 
 export const LanguageProvider = ({ children }: { children: ReactNode }) => {
   const [locale, setLocaleState] = useState<Locale>(() => {
-    const stored = localStorage.getItem("zense-locale");
+    const stored = localStorage.getItem("5e-locale");
     if (stored === "sv" || stored === "en" || stored === "zh") return stored;
     return "sv";
   });
 
   const setLocale = useCallback((l: Locale) => {
     setLocaleState(l);
-    localStorage.setItem("zense-locale", l);
+    localStorage.setItem("5e-locale", l);
   }, []);
 
   const t = useCallback((key: string): string => {

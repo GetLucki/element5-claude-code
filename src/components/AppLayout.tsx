@@ -35,7 +35,7 @@ const AppLayout = ({ children }: { children: ReactNode }) => {
 
       <aside className="hidden md:flex md:w-64 md:flex-col md:fixed md:inset-y-0 md:border-r md:border-border md:bg-card">
         <div className="flex h-16 items-center px-6">
-          <h1 className="text-xl font-bold text-secondary">Zense</h1>
+          <h1 className="text-xl font-bold text-secondary">5E</h1>
         </div>
         <BottomNav variant="sidebar" />
       </aside>
