@@ -1,135 +1,103 @@
 
 
-## UX Review & Improvement Plan
+## Internationalization (Swedish, English, Chinese) + Guest Mode
 
-After reviewing every screen (Login, Onboarding, Home, Scanner, Results, Plan, History, Profile), here are concrete improvements organized by impact.
-
----
-
-### 1. Login Page -- Improve Readability & Hierarchy
-
-**Problem:** The elevator pitch text at `/60` opacity is hard to read. The page has too much text for a first impression.
-
-**Changes:**
-- Bump pitch paragraph from `text-midnight-foreground/60` to `text-midnight-foreground/75`
-- Shorten the long pitch to two punchy lines max
-- Add subtle separator between form and social logins (already exists but ensure visual weight)
-
-**File:** `src/pages/LoginPage.tsx`
+This is a two-part feature: multi-language support with professionally written native copy, and a guest mode for trying the app without registration.
 
 ---
 
-### 2. Home Page (Index) -- Add Visual Personality & Remove Redundancy
+### Part 1: Internationalization (i18n)
 
-**Problem:** The "Forandring sedan forra veckan" card shows +0% for all metrics when there's only one scan -- this is confusing/meaningless. The page feels flat with uniform card styling.
+#### Architecture
 
-**Changes:**
-- Hide the comparison card entirely when all diffs are 0 (not just when no previous scan)
-- Add a subtle colored accent bar on the left side of the status card for visual interest
-- Make the "Ny Scanning" CTA more prominent with a subtle gradient or icon animation
+A lightweight React context-based i18n system (no external library needed given the app's size):
 
-**File:** `src/pages/Index.tsx`
+- `src/context/LanguageContext.tsx` — stores locale (`sv`, `en`, `zh`), provides a `t()` function
+- `src/data/translations/sv.ts` — Swedish strings (current copy, refined)
+- `src/data/translations/en.ts` — English strings (native copywriter quality)
+- `src/data/translations/zh.ts` — Simplified Chinese strings (native copywriter quality)
+- `src/data/diagnoses-en.ts` / `src/data/diagnoses-zh.ts` — localized diagnosis data
+- `src/data/tcm-glossary-en.ts` / `src/data/tcm-glossary-zh.ts` — localized glossary
 
----
+#### Language Selector Placement
 
-### 3. Scanner Upload Page -- Simplify & Guide
+- **Login page**: A small globe icon + language pills (SV / EN / ZH) at the top-right corner
+- **Profile page**: A "Language / Sprak" setting card
+- Language preference saved to localStorage (and to profile if logged in)
 
-**Problem:** "Demo Profiler (for testning)" section is visible to all users, cluttering the real experience. The upload area feels generic.
+#### What Gets Translated
 
-**Changes:**
-- Move demo profiles behind a toggle/expandable section (Collapsible) so the main focus is on the actual tongue photo upload
-- Add a small instructional illustration or tips list ("Racka ut tungan", "Bra ljus", "Ingen mat farg") in the upload card
-- Make upload card taller with a dashed border style for a more inviting drop zone feel
+All UI strings across every page and component:
+- Login, Onboarding, Home, Scanner, Plan, History, Profile pages
+- BottomNav labels, button text, metric names, error messages, toasts
+- Diagnosis data (name, tcmName, description, symptoms, food, supplements, etc.)
+- TCM glossary (term, short, detail)
+- The edge function prompt (analyze-tongue) should also receive the user's locale
 
-**File:** `src/pages/ScannerPage.tsx`
+#### Translation Strategy
 
----
+- **English**: Professional health-tech tone. Clear, warm, accessible. No jargon unless it's TCM-specific (which gets explained via popovers). Example: "Energy Deficit" not "Low Energy", "Your Body Map" not "Health Overview".
+- **Chinese (Simplified)**: Native TCM terminology used naturally since the audience understands it. More poetic/traditional tone appropriate for TCM content. Example: "气虚" used directly, explanations shorter since concepts are culturally familiar.
+- **Swedish**: Current copy refined for consistency.
 
-### 4. Results Page -- Better Visual Hierarchy
+#### Files Changed
 
-**Problem:** The step indicator at the top (1-2-3) takes up space and uses small text. The symptoms section ("Kanner du igen dig?") lacks interactivity -- it's just a static list.
-
-**Changes:**
-- Make the step indicator more compact: use a thin progress line with dots instead of numbered circles + text
-- Add subtle checkmarks to the symptoms list so users can confirm which ones they experience (visual engagement, no backend needed)
-- Add a small motivational note before the CTA ("Din personliga plan ar redo")
-
-**File:** `src/pages/ScannerPage.tsx`
-
----
-
-### 5. Plan Page (both standalone and scanner embedded) -- Reduce Overwhelm
-
-**Problem:** The plan page is very long with 7-8 sections. On mobile this requires a lot of scrolling. Sections like "Undvik" could be merged with relevant parent sections.
-
-**Changes:**
-- Merge "Undvik" items into the relevant sections (food avoid is already in food section, training avoid already in training -- remove standalone "Undvik" section to avoid repetition)
-- Use Accordion/Collapsible for secondary sections (Biohacks, Routines, Menstruation) so the page feels shorter by default
-- Keep Food, Supplements and Training always expanded as primary sections
-- Add section anchors/quick jump pills at the top ("Kost", "Tilskott", "Traning", "Mer...")
-
-**Files:** `src/pages/PlanPage.tsx`, `src/pages/ScannerPage.tsx` (plan phase)
-
----
-
-### 6. Profile Page -- Too Bare
-
-**Problem:** The profile page only shows name, email, scan count, and a logout button. It feels empty and unfinished.
-
-**Changes:**
-- Add user's health goals from onboarding (show the selected goals with emojis)
-- Add age range and gender info
-- Add a "Redigera profil" button that lets users update their onboarding preferences
-- Add a small "Om Zense" or app version footer
-
-**File:** `src/pages/ProfilePage.tsx`
+| File | Change |
+|------|--------|
+| `src/context/LanguageContext.tsx` | New — locale state, `t()` helper, `useLanguage()` hook |
+| `src/data/translations/sv.ts` | New — all Swedish UI strings |
+| `src/data/translations/en.ts` | New — all English UI strings |
+| `src/data/translations/zh.ts` | New — all Chinese UI strings |
+| `src/data/diagnoses.ts` | Refactor to export locale-keyed maps |
+| `src/data/tcm-glossary.ts` | Refactor to export locale-keyed maps |
+| `src/App.tsx` | Wrap with `LanguageProvider` |
+| `src/pages/LoginPage.tsx` | Add language selector, use `t()` |
+| `src/pages/OnboardingPage.tsx` | Use `t()` for all strings |
+| `src/pages/Index.tsx` | Use `t()` |
+| `src/pages/ScannerPage.tsx` | Use `t()` |
+| `src/pages/PlanPage.tsx` | Use `t()` |
+| `src/pages/HistoryPage.tsx` | Use `t()` |
+| `src/pages/ProfilePage.tsx` | Add language setting card, use `t()` |
+| `src/components/BottomNav.tsx` | Use `t()` for labels |
+| `src/components/AppLayout.tsx` | No change needed |
+| `src/components/TcmTerm.tsx` | Read locale to pick correct glossary |
+| `src/components/TcmRichText.tsx` | Read locale to pick correct glossary |
 
 ---
 
-### 7. History Page -- Add Empty State
+### Part 2: Guest Mode
 
-**Problem:** If a user has 0 or 1 scan, the history page shows nothing meaningful.
+#### How It Works
 
-**Changes:**
-- Add an empty state with illustration and CTA to scanner when no history exists
-- When only 1 scan, show the single scan with encouraging text ("Gor din nasta scanning om X dagar for att se din progression")
+- On the login page, add a "Testa utan konto" / "Try without account" / "免费试用" button
+- Clicking it sets a `guest: true` flag in a new `GuestContext` or extends `AuthContext`
+- Guest users skip onboarding and go straight to the scanner with demo profiles only (no real photo upload since that requires auth for the edge function)
+- Guest users can browse results and the plan page but see a soft prompt ("Create an account to save your progress") on History and Profile
+- No database writes for guests — scans stored in local state only
+- A persistent banner or CTA nudges guests to sign up
 
-**File:** `src/pages/HistoryPage.tsx`
+#### Files Changed
 
----
-
-### 8. Bottom Nav -- Active State Polish
-
-**Problem:** The active tab uses a color change but no other visual indicator. Easy to miss which tab you're on.
-
-**Changes:**
-- Add a small dot or short bar indicator below the active icon
-- Slightly increase active icon size for emphasis
-
-**File:** `src/components/BottomNav.tsx`
-
----
-
-### 9. Global Polish
-
-**Changes in `src/index.css`:**
-- Add smooth scroll behavior (`scroll-behavior: smooth`)
-- Add a subtle transition to glass-card hover states
+| File | Change |
+|------|--------|
+| `src/context/AuthContext.tsx` | Add `isGuest` state, `enterGuestMode()` function |
+| `src/components/AppLayout.tsx` | Allow guests through (skip login gate when `isGuest`) |
+| `src/pages/LoginPage.tsx` | Add guest mode button |
+| `src/context/HealthContext.tsx` | Support local-only scans when no user (guest mode) |
+| `src/pages/ProfilePage.tsx` | Show "Sign up to save" CTA for guests |
+| `src/pages/HistoryPage.tsx` | Show "Sign up to save" CTA for guests |
+| `src/pages/ScannerPage.tsx` | Hide real photo upload for guests, show only demo profiles |
 
 ---
 
-### Technical Summary
+### Implementation Order
 
-| File | Type of Change |
-|------|---------------|
-| `LoginPage.tsx` | Text opacity, copy trim |
-| `Index.tsx` | Hide zero-diff comparison, accent styling |
-| `ScannerPage.tsx` | Collapsible demos, upload tips, compact stepper, symptom checkmarks, plan section merges |
-| `PlanPage.tsx` | Accordion for secondary sections, remove duplicate "Undvik" |
-| `ProfilePage.tsx` | Show onboarding data, edit link |
-| `HistoryPage.tsx` | Empty state |
-| `BottomNav.tsx` | Active indicator dot |
-| `index.css` | Smooth scroll, hover transitions |
-
-All changes follow existing patterns (framer-motion animations, glass-card styling, Radix UI components already installed).
+1. Create `LanguageContext` with `t()` function and locale state
+2. Extract all Swedish strings into `sv.ts`, create `en.ts` and `zh.ts` with native-quality translations
+3. Create localized versions of diagnoses and glossary data
+4. Update all pages and components to use `t()` and locale-aware data
+5. Add language selector to Login and Profile pages
+6. Implement guest mode in AuthContext
+7. Update AppLayout, LoginPage, and HealthContext for guest flow
+8. Add guest CTAs on Profile and History pages
 
