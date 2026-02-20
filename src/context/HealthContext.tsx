@@ -1,7 +1,9 @@
 import React, { createContext, useContext, useState, useEffect, useCallback, ReactNode } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/context/AuthContext";
+import { useLanguage } from "@/context/LanguageContext";
 import { DiagnosisId, DiagnosisScenario, SCENARIOS } from "@/data/diagnoses";
+import { getLocalizedDiagnosis } from "@/data/localized-data";
 
 export type { DiagnosisId, DiagnosisScenario };
 export { SCENARIOS };
@@ -38,7 +40,8 @@ export const useHealth = () => {
 };
 
 export const HealthProvider = ({ children }: { children: ReactNode }) => {
-  const { user } = useAuth();
+  const { user, isGuest } = useAuth();
+  const { locale } = useLanguage();
   const [scans, setScans] = useState<ScanResult[]>([]);
   const [checklist, setChecklist] = useState<ChecklistState>({});
   const [loading, setLoading] = useState(true);
@@ -76,15 +79,33 @@ export const HealthProvider = ({ children }: { children: ReactNode }) => {
     }
   }, [user]);
 
-  useEffect(() => { loadScans(); }, [loadScans]);
+  useEffect(() => {
+    if (isGuest) {
+      setLoading(false);
+      return;
+    }
+    loadScans();
+  }, [loadScans, isGuest]);
 
   const currentScan = scans[scans.length - 1] || null;
 
   useEffect(() => {
-    if (currentScan) { loadChecklist(currentScan.id); } else { setChecklist({}); }
-  }, [currentScan?.id, loadChecklist]);
+    if (currentScan && !isGuest) { loadChecklist(currentScan.id); } else { setChecklist({}); }
+  }, [currentScan?.id, loadChecklist, isGuest]);
 
   const addScan = async (diagnosisId: DiagnosisId) => {
+    if (isGuest) {
+      // Guest mode: local-only scan
+      const scenario = SCENARIOS[diagnosisId];
+      const guestScan: ScanResult = {
+        id: `guest-${Date.now()}`,
+        date: new Date().toISOString().slice(0, 10),
+        diagnosisId,
+        metrics: { balans: scenario.metrics.balans, energi: scenario.metrics.energi, flode: scenario.metrics.flode },
+      };
+      setScans((prev) => [...prev, guestScan]);
+      return;
+    }
     if (!user) return;
     const scenario = SCENARIOS[diagnosisId];
     const { data, error } = await supabase
@@ -97,9 +118,15 @@ export const HealthProvider = ({ children }: { children: ReactNode }) => {
     }
   };
 
-  const getDiagnosis = (id: DiagnosisId) => SCENARIOS[id];
+  const getDiagnosis = useCallback((id: DiagnosisId) => getLocalizedDiagnosis(locale, id), [locale]);
 
   const toggleCheckItem = async (day: number, item: string) => {
+    if (isGuest) {
+      // Guest: local-only toggle
+      const newValue = !(checklist[day]?.[item] || false);
+      setChecklist((prev) => ({ ...prev, [day]: { ...(prev[day] || {}), [item]: newValue } }));
+      return;
+    }
     if (!user || !currentScan) return;
     const newValue = !(checklist[day]?.[item] || false);
     setChecklist((prev) => ({ ...prev, [day]: { ...(prev[day] || {}), [item]: newValue } }));
@@ -117,7 +144,7 @@ export const HealthProvider = ({ children }: { children: ReactNode }) => {
       return Math.round((completedCount / totalPossible) * 100);
     }
     return 0;
-  }, [currentScan, checklist]);
+  }, [currentScan, checklist, getDiagnosis]);
 
   return (
     <HealthContext.Provider value={{ scans, currentScan, addScan, getDiagnosis, checklist, toggleCheckItem, loading, getComplianceForScan }}>

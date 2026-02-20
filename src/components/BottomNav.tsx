@@ -1,13 +1,14 @@
 import { Home, ScanLine, ClipboardList, History, User } from "lucide-react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { cn } from "@/lib/utils";
+import { useLanguage } from "@/context/LanguageContext";
 
 const NAV_ITEMS = [
-  { path: "/", label: "Hem", icon: Home },
-  { path: "/scanner", label: "Scanner", icon: ScanLine },
-  { path: "/plan", label: "Plan", icon: ClipboardList },
-  { path: "/history", label: "Historik", icon: History },
-  { path: "/profile", label: "Profil", icon: User },
+  { path: "/", labelKey: "nav.home", icon: Home },
+  { path: "/scanner", labelKey: "nav.scanner", icon: ScanLine },
+  { path: "/plan", labelKey: "nav.plan", icon: ClipboardList },
+  { path: "/history", labelKey: "nav.history", icon: History },
+  { path: "/profile", labelKey: "nav.profile", icon: User },
 ];
 
 interface BottomNavProps {
@@ -17,11 +18,12 @@ interface BottomNavProps {
 const BottomNav = ({ variant = "bottom" }: BottomNavProps) => {
   const location = useLocation();
   const navigate = useNavigate();
+  const { t } = useLanguage();
 
   if (variant === "sidebar") {
     return (
       <nav className="flex flex-col gap-1 px-3 py-4">
-        {NAV_ITEMS.map(({ path, label, icon: Icon }) => {
+        {NAV_ITEMS.map(({ path, labelKey, icon: Icon }) => {
           const active = location.pathname === path;
           return (
             <button
@@ -35,7 +37,7 @@ const BottomNav = ({ variant = "bottom" }: BottomNavProps) => {
               )}
             >
               <Icon className={cn("h-5 w-5", active && "stroke-[2.5px]")} />
-              <span>{label}</span>
+              <span>{t(labelKey)}</span>
             </button>
           );
         })}
@@ -46,7 +48,7 @@ const BottomNav = ({ variant = "bottom" }: BottomNavProps) => {
   return (
     <nav className="fixed bottom-0 left-0 right-0 z-50 border-t border-border bg-card/95 backdrop-blur-md safe-area-pb">
       <div className="mx-auto flex max-w-md items-center justify-around py-2">
-        {NAV_ITEMS.map(({ path, label, icon: Icon }) => {
+        {NAV_ITEMS.map(({ path, labelKey, icon: Icon }) => {
           const active = location.pathname === path;
           return (
             <button
@@ -58,7 +60,7 @@ const BottomNav = ({ variant = "bottom" }: BottomNavProps) => {
               )}
             >
               <Icon className={cn("h-5 w-5 transition-transform", active && "stroke-[2.5px] scale-110")} />
-              <span className={cn("font-medium", active && "font-semibold")}>{label}</span>
+              <span className={cn("font-medium", active && "font-semibold")}>{t(labelKey)}</span>
               {active && (
                 <span className="absolute -bottom-1 left-1/2 -translate-x-1/2 h-1 w-5 rounded-full bg-secondary" />
               )}

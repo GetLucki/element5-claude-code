@@ -3,6 +3,7 @@ import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { LanguageProvider } from "@/context/LanguageContext";
 import { AuthProvider } from "@/context/AuthContext";
 import { HealthProvider } from "@/context/HealthContext";
 import AppLayout from "@/components/AppLayout";
@@ -22,20 +23,22 @@ const App = () => {
         <Toaster />
         <Sonner />
         <BrowserRouter>
-          <AuthProvider>
-            <HealthProvider>
-              <AppLayout>
-                <Routes>
-                  <Route path="/" element={<Index />} />
-                  <Route path="/scanner" element={<ScannerPage />} />
-                  <Route path="/plan" element={<PlanPage />} />
-                  <Route path="/history" element={<HistoryPage />} />
-                  <Route path="/profile" element={<ProfilePage />} />
-                  <Route path="*" element={<NotFound />} />
-                </Routes>
-              </AppLayout>
-            </HealthProvider>
-          </AuthProvider>
+          <LanguageProvider>
+            <AuthProvider>
+              <HealthProvider>
+                <AppLayout>
+                  <Routes>
+                    <Route path="/" element={<Index />} />
+                    <Route path="/scanner" element={<ScannerPage />} />
+                    <Route path="/plan" element={<PlanPage />} />
+                    <Route path="/history" element={<HistoryPage />} />
+                    <Route path="/profile" element={<ProfilePage />} />
+                    <Route path="*" element={<NotFound />} />
+                  </Routes>
+                </AppLayout>
+              </HealthProvider>
+            </AuthProvider>
+          </LanguageProvider>
         </BrowserRouter>
       </TooltipProvider>
     </QueryClientProvider>
