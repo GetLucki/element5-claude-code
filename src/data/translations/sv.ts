@@ -1,8 +1,8 @@
 export const sv: Record<string, string> = {
   // App
-  "app.name": "5E",
-  "app.tagline": "De fem elementen i balans.",
-  "app.version": "5E v1.0",
+  "app.name": "E5",
+  "app.tagline": "Den västerländska drömmen, upplåst med den österländska kartan.",
+  "app.version": "E5 v1.0",
 
   // Nav
   "nav.home": "Hem",
@@ -12,9 +12,9 @@ export const sv: Record<string, string> = {
   "nav.profile": "Profil",
 
   // Login
-  "login.title": "5E",
-  "login.pitch": "Förstå din kropp — på sekunder.",
-  "login.subtitle": "Fotografera din tunga, få en personlig plan för energi, sömn och balans.",
+  "login.title": "E5",
+  "login.pitch": "Lås upp din livskraft.",
+  "login.subtitle": "Vi använder den österländska kartan för att låsa upp den västerländska drömmen — funktionell livslängd genom de fem faserna.",
   "login.email": "E-postadress",
   "login.password": "Lösenord",
   "login.name": "Ditt namn",
@@ -32,7 +32,7 @@ export const sv: Record<string, string> = {
   "login.errorApple": "Apple-inloggning misslyckades",
 
   // Onboarding
-  "onboarding.welcome": "Välkommen till 5E",
+  "onboarding.welcome": "Välkommen till Element 5",
   "onboarding.intro": "Berätta lite om dig så att vi kan anpassa din upplevelse.",
   "onboarding.name": "Ditt namn",
   "onboarding.namePlaceholder": "Förnamn",

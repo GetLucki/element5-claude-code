@@ -1,8 +1,8 @@
 export const zh: Record<string, string> = {
   // App
-  "app.name": "5E",
-  "app.tagline": "五行平衡。",
-  "app.version": "5E v1.0",
+  "app.name": "E5",
+  "app.tagline": "以东方之图，解西方之梦。",
+  "app.version": "E5 v1.0",
 
   // Nav
   "nav.home": "首页",
@@ -12,9 +12,9 @@ export const zh: Record<string, string> = {
   "nav.profile": "我的",
 
   // Login
-  "login.title": "5E",
-  "login.pitch": "秒懂你的身体。",
-  "login.subtitle": "拍一张舌头照片，即刻获得专属的能量、睡眠与平衡调理方案。",
+  "login.title": "E5",
+  "login.pitch": "唤醒你的生命力。",
+  "login.subtitle": "以东方五行之法，解锁西方对生命力与长寿的终极追求。",
   "login.email": "电子邮箱",
   "login.password": "密码",
   "login.name": "你的名字",
@@ -32,7 +32,7 @@ export const zh: Record<string, string> = {
   "login.errorApple": "Apple 登录失败",
 
   // Onboarding
-  "onboarding.welcome": "欢迎使用 5E",
+  "onboarding.welcome": "欢迎使用 Element 5",
   "onboarding.intro": "请简单介绍一下自己，以便我们为你量身定制。",
   "onboarding.name": "你的名字",
   "onboarding.namePlaceholder": "名",

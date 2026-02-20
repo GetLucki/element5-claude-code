@@ -1,8 +1,8 @@
 export const en: Record<string, string> = {
   // App
-  "app.name": "5E",
-  "app.tagline": "Five Elements in Balance.",
-  "app.version": "5E v1.0",
+  "app.name": "E5",
+  "app.tagline": "The Western dream, unlocked by the Eastern map.",
+  "app.version": "E5 v1.0",
 
   // Nav
   "nav.home": "Home",
@@ -12,9 +12,9 @@ export const en: Record<string, string> = {
   "nav.profile": "Profile",
 
   // Login
-  "login.title": "5E",
-  "login.pitch": "Understand your body — in seconds.",
-  "login.subtitle": "Snap a photo of your tongue and receive a personalized plan for energy, sleep, and balance.",
+  "login.title": "E5",
+  "login.pitch": "Unlock your vital force.",
+  "login.subtitle": "We use the ancient Eastern map to unlock the Western dream — functional longevity through the Five Phases.",
   "login.email": "Email address",
   "login.password": "Password",
   "login.name": "Your name",
@@ -32,7 +32,7 @@ export const en: Record<string, string> = {
   "login.errorApple": "Apple sign-in failed",
 
   // Onboarding
-  "onboarding.welcome": "Welcome to 5E",
+  "onboarding.welcome": "Welcome to Element 5",
   "onboarding.intro": "Tell us a bit about yourself so we can personalize your experience.",
   "onboarding.name": "Your name",
   "onboarding.namePlaceholder": "First name",
