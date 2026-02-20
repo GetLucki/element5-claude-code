@@ -3,13 +3,14 @@ import { useHealth, DiagnosisId } from "@/context/HealthContext";
 import { useAuth } from "@/context/AuthContext";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { Camera, Upload, ScanLine, Video, X, Activity, Battery, Waves, UtensilsCrossed, Pill, Snowflake, ChevronRight, History, CheckCircle2, Circle, CalendarClock, Dumbbell, Moon, ShieldAlert, Heart, AlertCircle, Info } from "lucide-react";
+import { Camera, Upload, ScanLine, Video, X, Activity, Battery, Waves, UtensilsCrossed, Pill, Snowflake, ChevronRight, ChevronDown, History, CheckCircle2, Circle, CalendarClock, Dumbbell, Moon, ShieldAlert, Heart, AlertCircle, Info, Sun, Droplets } from "lucide-react";
 import TcmTerm from "@/components/TcmTerm";
 import TcmRichText from "@/components/TcmRichText";
 import { motion, AnimatePresence } from "framer-motion";
 import { useIsMobile } from "@/hooks/use-mobile";
 import { Progress } from "@/components/ui/progress";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
+import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
 import { differenceInDays } from "date-fns";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
@@ -66,6 +67,28 @@ const MetricBar = ({ label, value, icon: Icon, color }: { label: string; value: 
     <Progress value={value} className="h-2.5 bg-muted" />
   </div>
 );
+
+const SymptomChecklist = ({ symptoms }: { symptoms: string[] }) => {
+  const [checked, setChecked] = useState<Record<string, boolean>>({});
+  return (
+    <div className="space-y-2">
+      {symptoms.map((s) => (
+        <button
+          key={s}
+          onClick={() => setChecked((prev) => ({ ...prev, [s]: !prev[s] }))}
+          className="flex w-full items-center gap-3 rounded-xl bg-muted/50 px-4 py-2.5 text-left transition-colors hover:bg-muted/70"
+        >
+          {checked[s] ? (
+            <CheckCircle2 className="h-4 w-4 text-success shrink-0" />
+          ) : (
+            <Circle className="h-4 w-4 text-muted-foreground shrink-0" />
+          )}
+          <span className={`text-sm ${checked[s] ? "text-muted-foreground" : ""}`}>{s}</span>
+        </button>
+      ))}
+    </div>
+  );
+};
 
 const ScannerPage = () => {
   const { addScan, getDiagnosis, scans, currentScan, checklist, toggleCheckItem } = useHealth();
@@ -201,24 +224,16 @@ const ScannerPage = () => {
       {/* Step progress bar (post-scan) */}
       {isPostScan && (
         <motion.div initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }} className="mb-6">
-          <div className="flex items-center gap-2 mb-2">
+          <div className="flex items-center gap-1">
             {steps.map((step, i) => (
-              <div key={step.key} className="flex items-center gap-2 flex-1">
-                <div className="flex-1">
-                  <div className="flex items-center gap-2 mb-1">
-                    <div className={`flex h-6 w-6 items-center justify-center rounded-full text-xs font-bold ${
-                      i <= currentStepIndex ? "bg-secondary text-secondary-foreground" : "bg-muted text-muted-foreground"
-                    }`}>
-                      {i + 1}
-                    </div>
-                    <span className={`text-xs font-medium ${
-                      i <= currentStepIndex ? "text-foreground" : "text-muted-foreground"
-                    }`}>
-                      {step.label}
-                    </span>
-                  </div>
-                  <div className={`h-1 rounded-full ${i <= currentStepIndex ? "bg-secondary" : "bg-muted"}`} />
+              <div key={step.key} className="flex items-center flex-1">
+                <div className="flex flex-col items-center flex-1">
+                  <div className={`h-2 w-2 rounded-full mb-1 ${i <= currentStepIndex ? "bg-secondary" : "bg-muted"}`} />
+                  <span className={`text-[10px] font-medium ${i <= currentStepIndex ? "text-foreground" : "text-muted-foreground"}`}>{step.label}</span>
                 </div>
+                {i < steps.length - 1 && (
+                  <div className={`h-0.5 flex-1 -mt-3 ${i < currentStepIndex ? "bg-secondary" : "bg-muted"}`} />
+                )}
               </div>
             ))}
           </div>
@@ -264,12 +279,19 @@ const ScannerPage = () => {
             )}
 
             {!preview && !showWebcam && (
-              <div className="glass-card mb-6 flex flex-col items-center justify-center p-8 md:p-12">
+              <div className="mb-6 flex flex-col items-center justify-center rounded-2xl border-2 border-dashed border-border/70 bg-card/50 p-10 md:p-14">
                 <div className="mb-4 flex h-20 w-20 items-center justify-center rounded-full bg-muted">
                   <Camera className="h-8 w-8 text-muted-foreground" />
                 </div>
                 <p className="mb-2 font-semibold">Ladda upp tungfoto</p>
                 <p className="mb-4 text-center text-sm text-muted-foreground">Ta en bild av din tunga i god belysning för bästa resultat</p>
+                
+                <div className="mb-5 flex flex-wrap justify-center gap-2 text-xs text-muted-foreground">
+                  <span className="flex items-center gap-1 rounded-full bg-muted/60 px-3 py-1"><Sun className="h-3 w-3" />Bra ljus</span>
+                  <span className="flex items-center gap-1 rounded-full bg-muted/60 px-3 py-1"><Droplets className="h-3 w-3" />Ingen matfärg</span>
+                  <span className="flex items-center gap-1 rounded-full bg-muted/60 px-3 py-1">👅 Räck ut tungan</span>
+                </div>
+
                 <div className="flex flex-wrap justify-center gap-3">
                   <Button variant="outline" className="rounded-xl" onClick={() => fileInputRef.current?.click()}>
                     <Upload className="mr-2 h-4 w-4" />Välj foto
@@ -287,20 +309,25 @@ const ScannerPage = () => {
               </div>
             )}
 
-            <div className="mb-4">
-              <h3 className="mb-3 text-sm font-semibold uppercase tracking-wider text-muted-foreground">Demo Profiler (för testning)</h3>
-              <div className="space-y-2 md:grid md:grid-cols-2 md:gap-3 md:space-y-0 lg:grid-cols-3">
-                {DEMO_PROFILES.map((p) => (
-                  <button key={p.id} onClick={() => startAnalysis(p.id)} className="flex w-full items-center gap-3 rounded-xl border border-border bg-card p-4 text-left transition-all hover:border-secondary hover:shadow-md active:scale-[0.98]">
-                    <span className="text-2xl">{p.emoji}</span>
-                    <div>
-                      <p className="font-medium">{p.label}</p>
-                      <p className="text-xs text-muted-foreground">{getDiagnosis(p.id).description.slice(0, 60)}...</p>
-                    </div>
-                  </button>
-                ))}
-              </div>
-            </div>
+            <Collapsible className="mb-4">
+              <CollapsibleTrigger className="flex w-full items-center justify-between rounded-xl bg-muted/50 px-4 py-3 text-sm font-medium text-muted-foreground hover:bg-muted/70 transition-colors">
+                <span>Demo Profiler (för testning)</span>
+                <ChevronDown className="h-4 w-4" />
+              </CollapsibleTrigger>
+              <CollapsibleContent>
+                <div className="mt-2 space-y-2 md:grid md:grid-cols-2 md:gap-3 md:space-y-0 lg:grid-cols-3">
+                  {DEMO_PROFILES.map((p) => (
+                    <button key={p.id} onClick={() => startAnalysis(p.id)} className="flex w-full items-center gap-3 rounded-xl border border-border bg-card p-4 text-left transition-all hover:border-secondary hover:shadow-md active:scale-[0.98]">
+                      <span className="text-2xl">{p.emoji}</span>
+                      <div>
+                        <p className="font-medium">{p.label}</p>
+                        <p className="text-xs text-muted-foreground">{getDiagnosis(p.id).description.slice(0, 60)}...</p>
+                      </div>
+                    </button>
+                  ))}
+                </div>
+              </CollapsibleContent>
+            </Collapsible>
           </motion.div>
         )}
 
@@ -374,17 +401,12 @@ const ScannerPage = () => {
                 <div className="glass-card mb-6 p-5">
                   <h3 className="mb-3 font-semibold">Känner du igen dig?</h3>
                   <p className="mb-3 text-sm text-muted-foreground">Baserat på analysen är dessa symptom vanliga vid din profil:</p>
-                  <div className="space-y-2">
-                    {symptoms.map((s) => (
-                      <div key={s} className="flex items-center gap-3 rounded-xl bg-muted/50 px-4 py-2.5">
-                        <AlertCircle className="h-4 w-4 text-warm shrink-0" />
-                        <span className="text-sm">{s}</span>
-                      </div>
-                    ))}
-                  </div>
+                  <SymptomChecklist symptoms={symptoms} />
                 </div>
               ) : null;
             })()}
+
+            <p className="mb-3 text-center text-sm text-muted-foreground italic">Din personliga plan är redo ✨</p>
 
             <Button onClick={() => setPhase("plan")} className="w-full rounded-2xl bg-secondary py-6 text-base font-semibold text-secondary-foreground shadow-lg hover:bg-secondary/90">
               Visa åtgärdsplan

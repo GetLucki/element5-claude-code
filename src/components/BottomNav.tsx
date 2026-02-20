@@ -53,12 +53,15 @@ const BottomNav = ({ variant = "bottom" }: BottomNavProps) => {
               key={path}
               onClick={() => navigate(path)}
               className={cn(
-                "flex flex-col items-center gap-0.5 px-3 py-1.5 text-xs transition-colors",
+                "relative flex flex-col items-center gap-0.5 px-3 py-1.5 text-xs transition-colors",
                 active ? "text-secondary" : "text-muted-foreground"
               )}
             >
-              <Icon className={cn("h-5 w-5", active && "stroke-[2.5px]")} />
+              <Icon className={cn("h-5 w-5 transition-transform", active && "stroke-[2.5px] scale-110")} />
               <span className={cn("font-medium", active && "font-semibold")}>{label}</span>
+              {active && (
+                <span className="absolute -bottom-1 left-1/2 -translate-x-1/2 h-1 w-5 rounded-full bg-secondary" />
+              )}
             </button>
           );
         })}
