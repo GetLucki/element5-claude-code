@@ -1,8 +1,8 @@
 export const sv: Record<string, string> = {
   // App
-  "app.name": "Zense",
-  "app.tagline": "Holistisk hälsa, på riktigt.",
-  "app.version": "Zense v1.0",
+  "app.name": "5E",
+  "app.tagline": "De fem elementen i balans.",
+  "app.version": "5E v1.0",
 
   // Nav
   "nav.home": "Hem",
@@ -12,7 +12,7 @@ export const sv: Record<string, string> = {
   "nav.profile": "Profil",
 
   // Login
-  "login.title": "Zense",
+  "login.title": "5E",
   "login.pitch": "Förstå din kropp — på sekunder.",
   "login.subtitle": "Fotografera din tunga, få en personlig plan för energi, sömn och balans.",
   "login.email": "E-postadress",
@@ -32,7 +32,7 @@ export const sv: Record<string, string> = {
   "login.errorApple": "Apple-inloggning misslyckades",
 
   // Onboarding
-  "onboarding.welcome": "Välkommen till Zense",
+  "onboarding.welcome": "Välkommen till 5E",
   "onboarding.intro": "Berätta lite om dig så att vi kan anpassa din upplevelse.",
   "onboarding.name": "Ditt namn",
   "onboarding.namePlaceholder": "Förnamn",

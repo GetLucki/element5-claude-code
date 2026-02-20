@@ -1,8 +1,8 @@
 export const zh: Record<string, string> = {
   // App
-  "app.name": "Zense",
-  "app.tagline": "真正的整体健康。",
-  "app.version": "Zense v1.0",
+  "app.name": "5E",
+  "app.tagline": "五行平衡。",
+  "app.version": "5E v1.0",
 
   // Nav
   "nav.home": "首页",
@@ -12,7 +12,7 @@ export const zh: Record<string, string> = {
   "nav.profile": "我的",
 
   // Login
-  "login.title": "Zense",
+  "login.title": "5E",
   "login.pitch": "秒懂你的身体。",
   "login.subtitle": "拍一张舌头照片，即刻获得专属的能量、睡眠与平衡调理方案。",
   "login.email": "电子邮箱",
@@ -32,7 +32,7 @@ export const zh: Record<string, string> = {
   "login.errorApple": "Apple 登录失败",
 
   // Onboarding
-  "onboarding.welcome": "欢迎使用 Zense",
+  "onboarding.welcome": "欢迎使用 5E",
   "onboarding.intro": "请简单介绍一下自己，以便我们为你量身定制。",
   "onboarding.name": "你的名字",
   "onboarding.namePlaceholder": "名",
