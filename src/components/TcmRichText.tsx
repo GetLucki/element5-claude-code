@@ -4,7 +4,7 @@ import { TCM_GLOSSARY } from "@/data/tcm-glossary";
 /**
  * Renders text with automatic TcmTerm popovers for any recognized glossary terms.
  */
-const TcmRichText = ({ text, className }: { text: string; className?: string }) => {
+const TcmRichText = ({ text, className, variant }: { text: string; className?: string; variant?: "default" | "light" }) => {
   // Build a sorted list of terms (longest first to avoid partial matches)
   const entries = Object.entries(TCM_GLOSSARY)
     .map(([key, entry]) => ({ key, term: entry.term }))
@@ -22,7 +22,7 @@ const TcmRichText = ({ text, className }: { text: string; className?: string }) 
       {parts.map((part, i) => {
         const match = entries.find((e) => e.term.toLowerCase() === part.toLowerCase());
         if (match) {
-          return <TcmTerm key={i} termKey={match.key}>{part}</TcmTerm>;
+          return <TcmTerm key={i} termKey={match.key} variant={variant}>{part}</TcmTerm>;
         }
         return <span key={i}>{part}</span>;
       })}

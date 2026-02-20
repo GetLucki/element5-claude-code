@@ -330,14 +330,14 @@ const ScannerPage = () => {
 
             {/* Status card — merged with TCM explanation */}
             <div className="mb-6 rounded-2xl bg-midnight p-5 text-midnight-foreground">
-              <p className="mb-1 text-xs uppercase tracking-wider text-midnight-foreground/60">Din Hälsostatus</p>
+              <p className="mb-1 text-xs uppercase tracking-wider text-midnight-foreground/80">Din Hälsostatus</p>
               <h2 className="mb-1 text-xl font-bold">{diagnosis.name}</h2>
               <div className="flex items-center gap-2 mb-1">
-                <p className="text-sm font-medium text-midnight-foreground/60">{diagnosis.tcmName}</p>
+                <p className="text-sm font-medium text-midnight-foreground/80">{diagnosis.tcmName}</p>
                 <Popover>
                   <PopoverTrigger asChild>
                     <button type="button" className="inline-flex">
-                      <Info className="h-4 w-4 text-midnight-foreground/40 hover:text-midnight-foreground/80 transition-colors" />
+                      <Info className="h-4 w-4 text-midnight-foreground/60 hover:text-midnight-foreground transition-colors" />
                     </button>
                   </PopoverTrigger>
                   <PopoverContent className="w-80 p-4" side="bottom" align="start">
@@ -346,8 +346,8 @@ const ScannerPage = () => {
                   </PopoverContent>
                 </Popover>
               </div>
-              <p className="text-sm text-midnight-foreground/70 mb-3">{diagnosis.subtitle}</p>
-              <p className="text-sm text-midnight-foreground/60 leading-relaxed"><TcmRichText text={diagnosis.description} /></p>
+              <p className="text-sm text-midnight-foreground/90 mb-3">{diagnosis.subtitle}</p>
+              <p className="text-sm text-midnight-foreground/80 leading-relaxed"><TcmRichText text={diagnosis.description} variant="light" /></p>
             </div>
 
             {analysisSummary && (

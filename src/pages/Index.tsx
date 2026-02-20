@@ -86,14 +86,14 @@ const Index = () => {
         transition={{ delay: 0.1 }}
         className="mb-6 rounded-2xl bg-midnight p-5 text-midnight-foreground"
       >
-        <p className="mb-1 text-xs uppercase tracking-wider text-midnight-foreground/60">Din Hälsostatus</p>
+        <p className="mb-1 text-xs uppercase tracking-wider text-midnight-foreground/80">Din Hälsostatus</p>
         <h2 className="mb-1 text-xl font-bold">{diagnosis.name}</h2>
         <div className="flex items-center gap-2 mb-1">
-          <p className="text-sm font-medium text-midnight-foreground/60">{diagnosis.tcmName}</p>
+          <p className="text-sm font-medium text-midnight-foreground/80">{diagnosis.tcmName}</p>
           <Popover>
             <PopoverTrigger asChild>
               <button type="button" className="inline-flex">
-                <Info className="h-4 w-4 text-midnight-foreground/40 hover:text-midnight-foreground/80 transition-colors" />
+                <Info className="h-4 w-4 text-midnight-foreground/60 hover:text-midnight-foreground transition-colors" />
               </button>
             </PopoverTrigger>
             <PopoverContent className="w-80 p-4" side="bottom" align="start">
@@ -102,8 +102,8 @@ const Index = () => {
             </PopoverContent>
           </Popover>
         </div>
-        <p className="text-sm text-midnight-foreground/70">{diagnosis.subtitle}</p>
-        <div className="mt-3 flex items-center gap-2 text-xs text-midnight-foreground/50">
+        <p className="text-sm text-midnight-foreground/90">{diagnosis.subtitle}</p>
+        <div className="mt-3 flex items-center gap-2 text-xs text-midnight-foreground/70">
           <Calendar className="h-3.5 w-3.5" />
           <span>Senaste scan: {currentScan.date}</span>
         </div>
