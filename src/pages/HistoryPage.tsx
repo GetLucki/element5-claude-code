@@ -1,13 +1,33 @@
 import { useHealth } from "@/context/HealthContext";
+import { useAuth } from "@/context/AuthContext";
+import { useLanguage } from "@/context/LanguageContext";
 import { useNavigate } from "react-router-dom";
-import { Activity, Battery, Waves, CheckCircle2, ScanLine, CalendarClock } from "lucide-react";
+import { Activity, Battery, Waves, CheckCircle2, ScanLine, CalendarClock, User } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { motion } from "framer-motion";
 import { LineChart, Line, XAxis, YAxis, ResponsiveContainer, Tooltip } from "recharts";
 
 const HistoryPage = () => {
   const { scans, getDiagnosis, getComplianceForScan } = useHealth();
+  const { isGuest } = useAuth();
+  const { t } = useLanguage();
   const navigate = useNavigate();
+
+  // Guest CTA
+  if (isGuest && scans.length === 0) {
+    return (
+      <div className="flex min-h-[80vh] flex-col items-center justify-center px-6 text-center">
+        <motion.div initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }}>
+          <User className="mx-auto mb-4 h-12 w-12 text-muted-foreground" />
+          <h2 className="mb-2 text-xl font-semibold">{t("history.title")}</h2>
+          <p className="mb-6 text-muted-foreground">{t("guest.signUpCta")}</p>
+          <Button onClick={() => navigate("/scanner")} className="rounded-xl bg-secondary px-8 py-6 text-base font-semibold text-secondary-foreground">
+            {t("history.startScan")}
+          </Button>
+        </motion.div>
+      </div>
+    );
+  }
 
   // Empty state
   if (scans.length === 0) {
@@ -15,10 +35,10 @@ const HistoryPage = () => {
       <div className="flex min-h-[80vh] flex-col items-center justify-center px-6 text-center">
         <motion.div initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }}>
           <ScanLine className="mx-auto mb-4 h-12 w-12 text-muted-foreground" />
-          <h2 className="mb-2 text-xl font-semibold">Ingen historik ännu</h2>
-          <p className="mb-6 text-muted-foreground">Gör din första scanning för att börja spåra din hälsoresa</p>
+          <h2 className="mb-2 text-xl font-semibold">{t("history.noHistory")}</h2>
+          <p className="mb-6 text-muted-foreground">{t("history.noHistoryDesc")}</p>
           <Button onClick={() => navigate("/scanner")} className="rounded-xl bg-secondary px-8 py-6 text-base font-semibold text-secondary-foreground">
-            Starta Scanning
+            {t("history.startScan")}
           </Button>
         </motion.div>
       </div>
@@ -27,9 +47,9 @@ const HistoryPage = () => {
 
   const chartData = scans.map((s) => ({
     date: s.date.slice(5),
-    Balans: s.metrics.balans,
-    Energi: s.metrics.energi,
-    Flöde: s.metrics.flode,
+    [t("metric.balance")]: s.metrics.balans,
+    [t("metric.energy")]: s.metrics.energi,
+    [t("metric.flow")]: s.metrics.flode,
   }));
 
   const firstScan = scans[0];
@@ -44,8 +64,8 @@ const HistoryPage = () => {
     return (
       <div className="px-4 pt-6 md:pt-10">
         <motion.div initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }}>
-          <h1 className="mb-1 text-2xl font-bold">Historik</h1>
-          <p className="mb-6 text-sm text-muted-foreground">1 scanning totalt</p>
+          <h1 className="mb-1 text-2xl font-bold">{t("history.title")}</h1>
+          <p className="mb-6 text-sm text-muted-foreground">{t("history.scanTotal1")}</p>
         </motion.div>
 
         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }} className="glass-card mb-6 p-5">
@@ -67,13 +87,13 @@ const HistoryPage = () => {
 
         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.15 }} className="glass-card mb-6 flex items-center gap-3 p-4">
           <CalendarClock className="h-5 w-5 text-secondary shrink-0" />
-          <p className="text-sm text-muted-foreground">Gör din nästa scanning om några dagar för att se din progression 📈</p>
+          <p className="text-sm text-muted-foreground">{t("history.nextScanHint")}</p>
         </motion.div>
 
         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2 }}>
           <Button onClick={() => navigate("/scanner")} className="w-full rounded-xl bg-secondary py-6 text-base font-semibold text-secondary-foreground">
             <ScanLine className="mr-2 h-5 w-5" />
-            Ny Scanning
+            {t("history.newScan")}
           </Button>
         </motion.div>
       </div>
@@ -83,80 +103,68 @@ const HistoryPage = () => {
   return (
     <div className="px-4 pt-6 md:pt-10">
       <motion.div initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }}>
-        <h1 className="mb-1 text-2xl font-bold">Historik</h1>
-        <p className="mb-6 text-sm text-muted-foreground">{scans.length} scanningar totalt</p>
+        <h1 className="mb-1 text-2xl font-bold">{t("history.title")}</h1>
+        <p className="mb-6 text-sm text-muted-foreground">{t("history.scansTotal").replace("{count}", String(scans.length))}</p>
       </motion.div>
 
-      {/* Compliance Correlation */}
+      {/* Compliance */}
       {lastScan && currentCompliance > 0 && (
         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.05 }} className="glass-card mb-6 p-5">
           <div className="flex items-center gap-2 mb-3">
             <CheckCircle2 className="h-5 w-5 text-success" />
-            <h3 className="font-semibold">Planföljsamhet</h3>
+            <h3 className="font-semibold">{t("history.compliance")}</h3>
           </div>
           <div className="flex items-center gap-4">
             <div className="flex-1">
               <div className="h-3 rounded-full bg-muted overflow-hidden">
-                <motion.div
-                  className="h-full rounded-full bg-success"
-                  initial={{ width: 0 }}
-                  animate={{ width: `${currentCompliance}%` }}
-                  transition={{ duration: 0.8, delay: 0.3 }}
-                />
+                <motion.div className="h-full rounded-full bg-success" initial={{ width: 0 }} animate={{ width: `${currentCompliance}%` }} transition={{ duration: 0.8, delay: 0.3 }} />
               </div>
             </div>
             <span className="text-lg font-bold text-success">{currentCompliance}%</span>
           </div>
           <p className="mt-2 text-xs text-muted-foreground">
-            Du har följt {currentCompliance}% av din åtgärdsplan denna vecka
-            {currentCompliance >= 70 && " — fantastiskt arbete! 🌿"}
-            {currentCompliance >= 40 && currentCompliance < 70 && " — bra start, fortsätt så!"}
-            {currentCompliance < 40 && " — varje litet steg räknas"}
+            {t("history.complianceDesc").replace("{pct}", String(currentCompliance))}
+            {currentCompliance >= 70 && t("history.complianceHigh")}
+            {currentCompliance >= 40 && currentCompliance < 70 && t("history.complianceMid")}
+            {currentCompliance < 40 && t("history.complianceLow")}
           </p>
         </motion.div>
       )}
 
       {/* Chart */}
       <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }} className="glass-card mb-6 p-5">
-        <h3 className="mb-4 font-semibold">Progression</h3>
+        <h3 className="mb-4 font-semibold">{t("history.progression")}</h3>
         <div className="h-48">
           <ResponsiveContainer width="100%" height="100%">
             <LineChart data={chartData}>
               <XAxis dataKey="date" tick={{ fontSize: 11 }} stroke="hsl(var(--muted-foreground))" />
               <YAxis domain={[0, 100]} tick={{ fontSize: 11 }} stroke="hsl(var(--muted-foreground))" />
-              <Tooltip
-                contentStyle={{
-                  backgroundColor: "hsl(var(--card))",
-                  border: "1px solid hsl(var(--border))",
-                  borderRadius: "0.75rem",
-                  fontSize: "12px",
-                }}
-              />
-              <Line type="monotone" dataKey="Balans" stroke="hsl(var(--secondary))" strokeWidth={2} dot={{ r: 4 }} />
-              <Line type="monotone" dataKey="Energi" stroke="hsl(var(--warm))" strokeWidth={2} dot={{ r: 4 }} />
-              <Line type="monotone" dataKey="Flöde" stroke="hsl(var(--ring))" strokeWidth={2} dot={{ r: 4 }} />
+              <Tooltip contentStyle={{ backgroundColor: "hsl(var(--card))", border: "1px solid hsl(var(--border))", borderRadius: "0.75rem", fontSize: "12px" }} />
+              <Line type="monotone" dataKey={t("metric.balance")} stroke="hsl(var(--secondary))" strokeWidth={2} dot={{ r: 4 }} />
+              <Line type="monotone" dataKey={t("metric.energy")} stroke="hsl(var(--warm))" strokeWidth={2} dot={{ r: 4 }} />
+              <Line type="monotone" dataKey={t("metric.flow")} stroke="hsl(var(--ring))" strokeWidth={2} dot={{ r: 4 }} />
             </LineChart>
           </ResponsiveContainer>
         </div>
         <div className="mt-3 flex justify-center gap-4 text-xs">
-          <span className="flex items-center gap-1"><Activity className="h-3 w-3 text-secondary" />Balans</span>
-          <span className="flex items-center gap-1"><Battery className="h-3 w-3 text-warm" />Energi</span>
-          <span className="flex items-center gap-1"><Waves className="h-3 w-3 text-ring" />Flöde</span>
+          <span className="flex items-center gap-1"><Activity className="h-3 w-3 text-secondary" />{t("metric.balance")}</span>
+          <span className="flex items-center gap-1"><Battery className="h-3 w-3 text-warm" />{t("metric.energy")}</span>
+          <span className="flex items-center gap-1"><Waves className="h-3 w-3 text-ring" />{t("metric.flow")}</span>
         </div>
       </motion.div>
 
       {/* Comparison */}
       {firstDiag && lastDiag && firstScan !== lastScan && (
         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.15 }} className="glass-card mb-6 p-5">
-          <h3 className="mb-3 font-semibold">Jämförelse</h3>
+          <h3 className="mb-3 font-semibold">{t("history.comparison")}</h3>
           <div className="grid grid-cols-2 gap-4 text-sm">
             <div className="rounded-xl bg-muted/50 p-3">
-              <p className="mb-1 text-xs text-muted-foreground">Första Scan</p>
+              <p className="mb-1 text-xs text-muted-foreground">{t("history.firstScan")}</p>
               <p className="font-semibold">{firstDiag.name}</p>
               <p className="text-xs text-muted-foreground">{firstScan.date}</p>
             </div>
             <div className="rounded-xl bg-secondary/10 p-3">
-              <p className="mb-1 text-xs text-muted-foreground">Senaste Scan</p>
+              <p className="mb-1 text-xs text-muted-foreground">{t("history.latestScan")}</p>
               <p className="font-semibold">{lastDiag.name}</p>
               <p className="text-xs text-muted-foreground">{lastScan.date}</p>
             </div>
@@ -166,18 +174,12 @@ const HistoryPage = () => {
 
       {/* Timeline */}
       <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2 }}>
-        <h3 className="mb-3 font-semibold">Tidslinjen</h3>
+        <h3 className="mb-3 font-semibold">{t("history.timeline")}</h3>
         <div className="space-y-3">
           {[...scans].reverse().map((scan, i) => {
             const diag = getDiagnosis(scan.diagnosisId);
             return (
-              <motion.div
-                key={scan.id}
-                initial={{ opacity: 0, x: -10 }}
-                animate={{ opacity: 1, x: 0 }}
-                transition={{ delay: 0.25 + i * 0.05 }}
-                className="glass-card flex items-center gap-4 p-4"
-              >
+              <motion.div key={scan.id} initial={{ opacity: 0, x: -10 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: 0.25 + i * 0.05 }} className="glass-card flex items-center gap-4 p-4">
                 <div className="flex h-10 w-10 items-center justify-center rounded-full bg-secondary/20 text-secondary font-bold text-sm">
                   {scan.date.slice(8)}
                 </div>

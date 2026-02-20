@@ -1,14 +1,17 @@
 import { useState } from "react";
 import { useAuth } from "@/context/AuthContext";
+import { useLanguage } from "@/context/LanguageContext";
 import { lovable } from "@/integrations/lovable/index";
 import { Button } from "@/components/ui/button";
 import { Leaf, Loader2 } from "lucide-react";
 import { motion } from "framer-motion";
 import { toast } from "sonner";
+import LanguageSelector from "@/components/LanguageSelector";
 import loginBgVideo from "@/assets/login-bg.mp4";
 
 const LoginPage = () => {
-  const { signIn, signUp } = useAuth();
+  const { signIn, signUp, enterGuestMode } = useAuth();
+  const { t } = useLanguage();
   const [isSignUp, setIsSignUp] = useState(false);
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
@@ -24,12 +27,12 @@ const LoginPage = () => {
       if (error) {
         toast.error(error);
       } else {
-        toast.success("Kolla din e-post för att verifiera kontot!");
+        toast.success(t("login.emailSent"));
       }
     } else {
       const { error } = await signIn(email, password);
       if (error) {
-        toast.error("Fel e-post eller lösenord");
+        toast.error(t("login.errorCredentials"));
       }
     }
     setLoading(false);
@@ -37,21 +40,17 @@ const LoginPage = () => {
 
   return (
     <div className="relative flex min-h-screen flex-col items-center justify-center overflow-hidden">
-      {/* Video background */}
-      <video
-        autoPlay
-        loop
-        muted
-        playsInline
-        className="absolute inset-0 h-full w-full object-cover"
-      >
+      <video autoPlay loop muted playsInline className="absolute inset-0 h-full w-full object-cover">
         <source src={loginBgVideo} type="video/mp4" />
       </video>
 
-      {/* Dark overlay */}
       <div className="absolute inset-0 bg-midnight/80 backdrop-blur-sm" />
 
-      {/* Content */}
+      {/* Language selector */}
+      <div className="absolute top-4 right-4 z-20">
+        <LanguageSelector variant="compact" className="text-midnight-foreground" />
+      </div>
+
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
@@ -63,15 +62,10 @@ const LoginPage = () => {
             <Leaf className="h-8 w-8 text-secondary-foreground" />
           </div>
         </div>
-        <h1 className="mb-2 text-3xl font-bold text-midnight-foreground">Zense</h1>
+        <h1 className="mb-2 text-3xl font-bold text-midnight-foreground">{t("login.title")}</h1>
 
-        {/* Elevator pitch */}
-        <p className="mb-2 text-base font-medium text-midnight-foreground/90">
-          Förstå din kropp — på sekunder.
-        </p>
-        <p className="mb-8 text-sm leading-relaxed text-midnight-foreground/75">
-          Fotografera din tunga, få en personlig plan för energi, sömn och balans.
-        </p>
+        <p className="mb-2 text-base font-medium text-midnight-foreground/90">{t("login.pitch")}</p>
+        <p className="mb-8 text-sm leading-relaxed text-midnight-foreground/75">{t("login.subtitle")}</p>
 
         <form onSubmit={handleSubmit} className="space-y-4">
           {isSignUp && (
@@ -79,7 +73,7 @@ const LoginPage = () => {
               type="text"
               value={name}
               onChange={(e) => setName(e.target.value)}
-              placeholder="Ditt namn"
+              placeholder={t("login.name")}
               required
               className="w-full rounded-xl border border-border/20 bg-midnight-foreground/10 px-4 py-3 text-midnight-foreground placeholder:text-midnight-foreground/40 focus:outline-none focus:ring-2 focus:ring-secondary"
             />
@@ -88,7 +82,7 @@ const LoginPage = () => {
             type="email"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
-            placeholder="E-postadress"
+            placeholder={t("login.email")}
             required
             className="w-full rounded-xl border border-border/20 bg-midnight-foreground/10 px-4 py-3 text-midnight-foreground placeholder:text-midnight-foreground/40 focus:outline-none focus:ring-2 focus:ring-secondary"
           />
@@ -96,7 +90,7 @@ const LoginPage = () => {
             type="password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
-            placeholder="Lösenord"
+            placeholder={t("login.password")}
             required
             minLength={6}
             className="w-full rounded-xl border border-border/20 bg-midnight-foreground/10 px-4 py-3 text-midnight-foreground placeholder:text-midnight-foreground/40 focus:outline-none focus:ring-2 focus:ring-secondary"
@@ -106,14 +100,14 @@ const LoginPage = () => {
             disabled={loading}
             className="w-full rounded-xl bg-secondary py-6 text-base font-semibold text-secondary-foreground hover:bg-secondary/90"
           >
-            {loading ? <Loader2 className="h-5 w-5 animate-spin" /> : isSignUp ? "Skapa konto" : "Logga in"}
+            {loading ? <Loader2 className="h-5 w-5 animate-spin" /> : isSignUp ? t("login.signUp") : t("login.signIn")}
           </Button>
         </form>
 
         <div className="mt-6 flex flex-col gap-3">
           <div className="flex items-center gap-3">
             <div className="h-px flex-1 bg-midnight-foreground/20" />
-            <span className="text-xs text-midnight-foreground/50">eller</span>
+            <span className="text-xs text-midnight-foreground/50">{t("login.or")}</span>
             <div className="h-px flex-1 bg-midnight-foreground/20" />
           </div>
           <Button
@@ -124,11 +118,11 @@ const LoginPage = () => {
               const { error } = await lovable.auth.signInWithOAuth("google", {
                 redirect_uri: window.location.origin,
               });
-              if (error) toast.error("Google-inloggning misslyckades");
+              if (error) toast.error(t("login.errorGoogle"));
             }}
           >
             <svg className="mr-2 h-5 w-5" viewBox="0 0 24 24"><path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92a5.06 5.06 0 0 1-2.2 3.32v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.1z" fill="#4285F4"/><path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/><path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" fill="#FBBC05"/><path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/></svg>
-            Logga in med Google
+            {t("login.google")}
           </Button>
           <Button
             type="button"
@@ -138,19 +132,29 @@ const LoginPage = () => {
               const { error } = await lovable.auth.signInWithOAuth("apple", {
                 redirect_uri: window.location.origin,
               });
-              if (error) toast.error("Apple-inloggning misslyckades");
+              if (error) toast.error(t("login.errorApple"));
             }}
           >
             <svg className="mr-2 h-5 w-5" viewBox="0 0 24 24" fill="currentColor"><path d="M17.05 20.28c-.98.95-2.05.88-3.08.4-1.09-.5-2.08-.48-3.24 0-1.44.62-2.2.44-3.06-.4C2.79 15.25 3.51 7.59 9.05 7.31c1.35.07 2.29.74 3.08.8 1.18-.24 2.31-.93 3.57-.84 1.51.12 2.65.72 3.4 1.8-3.12 1.87-2.38 5.98.48 7.13-.57 1.5-1.31 2.99-2.54 4.09zM12.03 7.25c-.15-2.23 1.66-4.07 3.74-4.25.29 2.58-2.34 4.5-3.74 4.25z"/></svg>
-            Logga in med Apple
+            {t("login.apple")}
+          </Button>
+
+          {/* Guest mode */}
+          <Button
+            type="button"
+            variant="ghost"
+            className="w-full rounded-xl py-5 text-midnight-foreground/70 hover:text-midnight-foreground/90 hover:bg-midnight-foreground/5"
+            onClick={enterGuestMode}
+          >
+            {t("login.guestMode")}
           </Button>
         </div>
 
         <button
           onClick={() => setIsSignUp(!isSignUp)}
-          className="mt-6 text-sm text-midnight-foreground/70 hover:text-midnight-foreground/90 transition-colors"
+          className="mt-4 text-sm text-midnight-foreground/70 hover:text-midnight-foreground/90 transition-colors"
         >
-          {isSignUp ? "Har redan ett konto? Logga in" : "Inget konto? Skapa ett"}
+          {isSignUp ? t("login.switchToSignIn") : t("login.switchToSignUp")}
         </button>
       </motion.div>
     </div>

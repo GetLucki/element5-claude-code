@@ -1,16 +1,15 @@
 import TcmTerm from "@/components/TcmTerm";
-import { TCM_GLOSSARY } from "@/data/tcm-glossary";
+import { useLanguage } from "@/context/LanguageContext";
+import { getLocalizedGlossary } from "@/data/localized-data";
 
-/**
- * Renders text with automatic TcmTerm popovers for any recognized glossary terms.
- */
 const TcmRichText = ({ text, className, variant }: { text: string; className?: string; variant?: "default" | "light" }) => {
-  // Build a sorted list of terms (longest first to avoid partial matches)
-  const entries = Object.entries(TCM_GLOSSARY)
+  const { locale } = useLanguage();
+  const glossary = getLocalizedGlossary(locale);
+
+  const entries = Object.entries(glossary)
     .map(([key, entry]) => ({ key, term: entry.term }))
     .sort((a, b) => b.term.length - a.term.length);
 
-  // Build regex matching any glossary term (case-insensitive)
   const pattern = entries.map((e) => e.term.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")).join("|");
   if (!pattern) return <span className={className}>{text}</span>;
 

@@ -18,9 +18,12 @@ interface AuthContextType {
   session: Session | null;
   profile: UserProfile | null;
   loading: boolean;
+  isGuest: boolean;
   signUp: (email: string, password: string, name: string) => Promise<{ error: string | null }>;
   signIn: (email: string, password: string) => Promise<{ error: string | null }>;
   signOut: () => Promise<void>;
+  enterGuestMode: () => void;
+  exitGuestMode: () => void;
   updateProfile: (data: Partial<UserProfile>) => Promise<void>;
   refreshProfile: () => Promise<void>;
 }
@@ -38,6 +41,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [session, setSession] = useState<Session | null>(null);
   const [profile, setProfile] = useState<UserProfile | null>(null);
   const [loading, setLoading] = useState(true);
+  const [isGuest, setIsGuest] = useState(false);
 
   const loadProfile = useCallback(async (userId: string) => {
     const { data } = await supabase
@@ -51,11 +55,11 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         id: data.id,
         name: data.name,
         avatar_url: data.avatar_url,
-        age_range: (data as any).age_range ?? null,
-        gender: (data as any).gender ?? null,
-        has_menstruation: (data as any).has_menstruation ?? null,
-        health_goals: (data as any).health_goals ?? [],
-        onboarding_completed: (data as any).onboarding_completed ?? false,
+        age_range: data.age_range ?? null,
+        gender: data.gender ?? null,
+        has_menstruation: data.has_menstruation ?? null,
+        health_goals: data.health_goals ?? [],
+        onboarding_completed: data.onboarding_completed ?? false,
       });
     }
   }, []);
@@ -69,7 +73,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       setSession(session);
       setUser(session?.user ?? null);
       if (session?.user) {
-        // defer profile load to avoid deadlock
+        setIsGuest(false);
         setTimeout(() => loadProfile(session.user.id), 0);
       } else {
         setProfile(null);
@@ -109,6 +113,16 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const signOut = async () => {
     await supabase.auth.signOut();
     setProfile(null);
+    setIsGuest(false);
+  };
+
+  const enterGuestMode = () => {
+    setIsGuest(true);
+    setLoading(false);
+  };
+
+  const exitGuestMode = () => {
+    setIsGuest(false);
   };
 
   const updateProfile = async (data: Partial<UserProfile>) => {
@@ -121,7 +135,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   };
 
   return (
-    <AuthContext.Provider value={{ user, session, profile, loading, signUp, signIn, signOut, updateProfile, refreshProfile }}>
+    <AuthContext.Provider value={{ user, session, profile, loading, isGuest, signUp, signIn, signOut, enterGuestMode, exitGuestMode, updateProfile, refreshProfile }}>
       {children}
     </AuthContext.Provider>
   );

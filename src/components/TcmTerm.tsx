@@ -1,5 +1,6 @@
-import { useState } from "react";
-import { TCM_GLOSSARY, TcmGlossaryEntry } from "@/data/tcm-glossary";
+import { useLanguage } from "@/context/LanguageContext";
+import { getLocalizedGlossary } from "@/data/localized-data";
+import { TcmGlossaryEntry } from "@/data/tcm-glossary";
 import { Info } from "lucide-react";
 import {
   Popover,
@@ -13,12 +14,10 @@ interface TcmTermProps {
   variant?: "default" | "light";
 }
 
-/**
- * Renders a clickable TCM term with an info icon.
- * On click, shows a popover with the term's explanation.
- */
 const TcmTerm = ({ termKey, children, variant = "default" }: TcmTermProps) => {
-  const entry: TcmGlossaryEntry | undefined = TCM_GLOSSARY[termKey];
+  const { locale } = useLanguage();
+  const glossary = getLocalizedGlossary(locale);
+  const entry: TcmGlossaryEntry | undefined = glossary[termKey];
   if (!entry) return <>{children || termKey}</>;
 
   const buttonClass = variant === "light"
@@ -28,19 +27,12 @@ const TcmTerm = ({ termKey, children, variant = "default" }: TcmTermProps) => {
   return (
     <Popover>
       <PopoverTrigger asChild>
-        <button
-          type="button"
-          className={buttonClass}
-        >
+        <button type="button" className={buttonClass}>
           {children || entry.term}
           <Info className="h-3.5 w-3.5 shrink-0 opacity-60" />
         </button>
       </PopoverTrigger>
-      <PopoverContent
-        className="w-80 p-4"
-        side="top"
-        align="start"
-      >
+      <PopoverContent className="w-80 p-4" side="top" align="start">
         <div className="space-y-2">
           <div className="flex items-baseline gap-2">
             <span className="font-bold text-foreground">{entry.term}</span>
