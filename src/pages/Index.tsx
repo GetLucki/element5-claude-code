@@ -84,8 +84,9 @@ const Index = () => {
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.1 }}
-        className="mb-6 rounded-2xl bg-midnight p-5 text-midnight-foreground"
+        className="mb-6 overflow-hidden rounded-2xl bg-midnight p-5 text-midnight-foreground relative"
       >
+        <div className="absolute left-0 top-0 bottom-0 w-1 bg-secondary rounded-l-2xl" />
         <p className="mb-1 text-xs uppercase tracking-wider text-midnight-foreground/80">Din Hälsostatus</p>
         <h2 className="mb-1 text-xl font-bold">{diagnosis.name}</h2>
         <div className="flex items-center gap-2 mb-1">
@@ -124,8 +125,12 @@ const Index = () => {
         </div>
       </motion.div>
 
-      {/* Comparison */}
-      {previousScan && prevDiagnosis && (
+      {/* Comparison — hide when all diffs are 0 */}
+      {previousScan && prevDiagnosis && (() => {
+        const diffs = (["balans", "energi", "flode"] as const).map(k => currentScan.metrics[k] - previousScan.metrics[k]);
+        const hasChange = diffs.some(d => d !== 0);
+        return hasChange;
+      })() && (
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -157,9 +162,9 @@ const Index = () => {
       <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.4 }}>
         <Button
           onClick={() => navigate("/scanner")}
-          className="w-full rounded-2xl bg-secondary py-6 text-base font-semibold text-secondary-foreground shadow-lg hover:bg-secondary/90"
+          className="group w-full rounded-2xl bg-secondary py-6 text-base font-semibold text-secondary-foreground shadow-lg hover:bg-secondary/90 hover:shadow-xl transition-all"
         >
-          <ScanLine className="mr-2 h-5 w-5" />
+          <ScanLine className="mr-2 h-5 w-5 transition-transform group-hover:scale-110" />
           Ny Scanning
         </Button>
       </motion.div>

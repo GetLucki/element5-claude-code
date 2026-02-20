@@ -69,8 +69,8 @@ const LoginPage = () => {
         <p className="mb-2 text-base font-medium text-midnight-foreground/90">
           Förstå din kropp — på sekunder.
         </p>
-        <p className="mb-8 text-sm leading-relaxed text-midnight-foreground/60">
-          Vi förenar tusenårig österländsk diagnostik med funktionell medicin i en holistisk hälsoupplevelse. Ta en bild på din tunga och få en skräddarsydd plan för energi, sömn och hormonell balans.
+        <p className="mb-8 text-sm leading-relaxed text-midnight-foreground/75">
+          Fotografera din tunga, få en personlig plan för energi, sömn och balans.
         </p>
 
         <form onSubmit={handleSubmit} className="space-y-4">
@@ -148,7 +148,7 @@ const LoginPage = () => {
 
         <button
           onClick={() => setIsSignUp(!isSignUp)}
-          className="mt-6 text-sm text-midnight-foreground/60 hover:text-midnight-foreground/80 transition-colors"
+          className="mt-6 text-sm text-midnight-foreground/70 hover:text-midnight-foreground/90 transition-colors"
         >
           {isSignUp ? "Har redan ett konto? Logga in" : "Inget konto? Skapa ett"}
         </button>
