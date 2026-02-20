@@ -81,6 +81,15 @@ export const HealthProvider = ({ children }: { children: ReactNode }) => {
 
   useEffect(() => {
     if (isGuest) {
+      // Pre-load a demo scan so guests see data on all pages
+      const demoScenario = SCENARIOS["low-energy"];
+      const demoScan: ScanResult = {
+        id: "guest-demo",
+        date: new Date().toISOString().slice(0, 10),
+        diagnosisId: "low-energy",
+        metrics: { balans: demoScenario.metrics.balans, energi: demoScenario.metrics.energi, flode: demoScenario.metrics.flode },
+      };
+      setScans([demoScan]);
       setLoading(false);
       return;
     }

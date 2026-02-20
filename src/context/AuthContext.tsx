@@ -65,8 +65,9 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   }, []);
 
   const refreshProfile = useCallback(async () => {
-    if (user) await loadProfile(user.id);
-  }, [user, loadProfile]);
+    if (isGuest || !user) return;
+    await loadProfile(user.id);
+  }, [user, isGuest, loadProfile]);
 
   useEffect(() => {
     const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
@@ -118,15 +119,26 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
   const enterGuestMode = () => {
     setIsGuest(true);
+    setProfile({
+      id: "guest",
+      name: "Gäst",
+      avatar_url: null,
+      age_range: null,
+      gender: null,
+      has_menstruation: null,
+      health_goals: [],
+      onboarding_completed: true,
+    });
     setLoading(false);
   };
 
   const exitGuestMode = () => {
     setIsGuest(false);
+    setProfile(null);
   };
 
   const updateProfile = async (data: Partial<UserProfile>) => {
-    if (!user) return;
+    if (isGuest || !user) return;
     await supabase
       .from("profiles")
       .update(data as any)
