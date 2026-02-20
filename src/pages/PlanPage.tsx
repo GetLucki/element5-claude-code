@@ -42,7 +42,8 @@ const PlanPage = () => {
     <div className="px-4 pt-6 md:pt-10">
       <motion.div initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }}>
         <h1 className="mb-1 text-2xl font-bold">Din Veckoplan</h1>
-        <p className="mb-6 text-sm text-muted-foreground">Baserad på: {diagnosis.name}</p>
+        <p className="mb-1 text-sm text-muted-foreground">Baserad på: {diagnosis.name} — <span className="italic">{diagnosis.tcmName}</span></p>
+        <p className="mb-6 text-xs text-muted-foreground">TCM-princip: behandla roten, inte bara symptomen</p>
       </motion.div>
 
       {/* Countdown */}
@@ -58,8 +59,11 @@ const PlanPage = () => {
       <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.15 }} className="glass-card mb-4 p-5">
         <div className="mb-3 flex items-center gap-2">
           <UtensilsCrossed className="h-5 w-5 text-secondary" />
-          <h3 className="font-semibold">Kost — Mat som Medicin</h3>
-        </div>
+              <h3 className="font-semibold">Kost — Mat som Medicin</h3>
+            </div>
+            {diagnosis.food.tcmNote && (
+              <p className="mb-3 text-xs text-muted-foreground italic border-l-2 border-secondary/30 pl-3">{diagnosis.food.tcmNote}</p>
+            )}
         <div className="mb-3">
           <p className="mb-1 text-xs font-semibold uppercase tracking-wider text-success">Ät mer av</p>
           <ul className="space-y-1 text-sm">
