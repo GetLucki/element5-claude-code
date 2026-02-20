@@ -3,11 +3,13 @@ import { useHealth, DiagnosisId } from "@/context/HealthContext";
 import { useAuth } from "@/context/AuthContext";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { Camera, Upload, ScanLine, Video, X, Activity, Battery, Waves, UtensilsCrossed, Pill, Snowflake, ChevronRight, History, CheckCircle2, Circle, CalendarClock, Dumbbell, Moon, ShieldAlert, Heart, AlertCircle } from "lucide-react";
+import { Camera, Upload, ScanLine, Video, X, Activity, Battery, Waves, UtensilsCrossed, Pill, Snowflake, ChevronRight, History, CheckCircle2, Circle, CalendarClock, Dumbbell, Moon, ShieldAlert, Heart, AlertCircle, Info } from "lucide-react";
 import TcmTerm from "@/components/TcmTerm";
+import TcmRichText from "@/components/TcmRichText";
 import { motion, AnimatePresence } from "framer-motion";
 import { useIsMobile } from "@/hooks/use-mobile";
 import { Progress } from "@/components/ui/progress";
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { differenceInDays } from "date-fns";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
@@ -24,12 +26,40 @@ const DAYS = ["Mån", "Tis", "Ons", "Tor", "Fre", "Lör", "Sön"];
 
 type Phase = "upload" | "analyzing" | "result" | "plan" | "history";
 
+const METRIC_EXPLANATIONS: Record<string, { title: string; description: string }> = {
+  Balans: {
+    title: "Balans (Yin-Yang jämvikt)",
+    description: "Mäter hur väl kroppens Yin och Yang är i harmoni. Hög balans innebär att kroppens kylande och värmande krafter arbetar i samklang. Låg balans tyder på att en av krafterna dominerar."
+  },
+  Energi: {
+    title: "Energi (Qi-nivå)",
+    description: "Mäter din totala Qi-nivå — kroppens livskraft. Hög energi visar att kroppen effektivt omvandlar näring till användbar kraft. Låg energi tyder på att Qi-produktionen (via Mjälte och Mage) behöver stöd."
+  },
+  Flöde: {
+    title: "Flöde (Qi- & Blodcirkulation)",
+    description: "Mäter hur fritt Qi och Blod flödar genom kroppens meridianer. Högt flöde innebär fri passage utan blockeringar. Lågt flöde tyder på stagnation som kan ge smärta, spänningar eller stelhet."
+  },
+};
+
 const MetricBar = ({ label, value, icon: Icon, color }: { label: string; value: number; icon: any; color: string }) => (
   <div className="space-y-2">
     <div className="flex items-center justify-between text-sm">
       <div className="flex items-center gap-2 text-muted-foreground">
         <Icon className={`h-4 w-4 ${color}`} />
         <span>{label}</span>
+        {METRIC_EXPLANATIONS[label] && (
+          <Popover>
+            <PopoverTrigger asChild>
+              <button type="button" className="inline-flex">
+                <Info className="h-3.5 w-3.5 text-muted-foreground/60 hover:text-secondary transition-colors" />
+              </button>
+            </PopoverTrigger>
+            <PopoverContent className="w-80 p-4" side="top" align="start">
+              <p className="font-bold text-foreground mb-1">{METRIC_EXPLANATIONS[label].title}</p>
+              <p className="text-sm text-muted-foreground leading-relaxed">{METRIC_EXPLANATIONS[label].description}</p>
+            </PopoverContent>
+          </Popover>
+        )}
       </div>
       <span className="font-semibold">{value}%</span>
     </div>
@@ -298,12 +328,26 @@ const ScannerPage = () => {
           <motion.div key="result" initial={{ opacity: 0, x: 40 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -40 }} transition={{ duration: 0.35 }}>
             <h1 className="mb-6 text-2xl font-bold md:text-3xl">Ditt Resultat</h1>
 
-            {/* Status card */}
+            {/* Status card — merged with TCM explanation */}
             <div className="mb-6 rounded-2xl bg-midnight p-5 text-midnight-foreground">
-              <p className="mb-1 text-xs uppercase tracking-wider text-midnight-foreground/60">Din Hälsostatus — TCM-analys</p>
+              <p className="mb-1 text-xs uppercase tracking-wider text-midnight-foreground/60">Din Hälsostatus</p>
               <h2 className="mb-1 text-xl font-bold">{diagnosis.name}</h2>
-              <p className="text-sm font-medium text-midnight-foreground/60 mb-1">{diagnosis.tcmName}</p>
-              <p className="text-sm text-midnight-foreground/70">{diagnosis.subtitle}</p>
+              <div className="flex items-center gap-2 mb-1">
+                <p className="text-sm font-medium text-midnight-foreground/60">{diagnosis.tcmName}</p>
+                <Popover>
+                  <PopoverTrigger asChild>
+                    <button type="button" className="inline-flex">
+                      <Info className="h-4 w-4 text-midnight-foreground/40 hover:text-midnight-foreground/80 transition-colors" />
+                    </button>
+                  </PopoverTrigger>
+                  <PopoverContent className="w-80 p-4" side="bottom" align="start">
+                    <p className="font-bold text-foreground mb-1">{diagnosis.tcmName}</p>
+                    <p className="text-sm text-muted-foreground leading-relaxed">{diagnosis.statusExplanation}</p>
+                  </PopoverContent>
+                </Popover>
+              </div>
+              <p className="text-sm text-midnight-foreground/70 mb-3">{diagnosis.subtitle}</p>
+              <p className="text-sm text-midnight-foreground/60 leading-relaxed"><TcmRichText text={diagnosis.description} /></p>
             </div>
 
             {analysisSummary && (
@@ -312,14 +356,6 @@ const ScannerPage = () => {
                 <p className="text-sm text-muted-foreground">{analysisSummary}</p>
               </div>
             )}
-
-            <p className="mb-4 text-sm text-muted-foreground">{diagnosis.description}</p>
-
-            {/* TCM explanation */}
-            <div className="glass-card mb-6 p-4 border-l-4 border-secondary/50">
-              <p className="text-sm font-semibold uppercase tracking-wider text-secondary mb-2">Ur ett <TcmTerm termKey="tungdiagnostik">TCM</TcmTerm>-perspektiv</p>
-              <p className="text-sm text-muted-foreground leading-relaxed">{diagnosis.tcmExplanation}</p>
-            </div>
 
             {/* Metrics */}
             <div className="glass-card mb-6 p-5">
@@ -370,7 +406,9 @@ const ScannerPage = () => {
                 <h3 className="font-semibold">Kost — Mat som Medicin</h3>
               </div>
               {diagnosis.food.tcmNote && (
-                <p className="mb-3 text-sm text-muted-foreground italic border-l-2 border-secondary/30 pl-3">{diagnosis.food.tcmNote}</p>
+                <p className="mb-3 text-sm text-muted-foreground italic border-l-2 border-secondary/30 pl-3">
+                  <TcmRichText text={diagnosis.food.tcmNote} />
+                </p>
               )}
               <div className="mb-3">
                 <p className="mb-1 text-xs font-semibold uppercase tracking-wider text-success">Ät mer av</p>

@@ -1,11 +1,27 @@
 import { useHealth } from "@/context/HealthContext";
 import { useAuth } from "@/context/AuthContext";
 import { useNavigate } from "react-router-dom";
-import { Battery, Activity, Waves, TrendingUp, ScanLine, Calendar } from "lucide-react";
+import { Battery, Activity, Waves, TrendingUp, ScanLine, Calendar, Info } from "lucide-react";
 import TcmTerm from "@/components/TcmTerm";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { motion } from "framer-motion";
+
+const METRIC_EXPLANATIONS: Record<string, { title: string; description: string }> = {
+  Balans: {
+    title: "Balans (Yin-Yang jämvikt)",
+    description: "Mäter hur väl kroppens Yin och Yang är i harmoni. Hög balans innebär att kroppens kylande och värmande krafter arbetar i samklang."
+  },
+  Energi: {
+    title: "Energi (Qi-nivå)",
+    description: "Mäter din totala Qi-nivå — kroppens livskraft. Hög energi visar att kroppen effektivt omvandlar näring till användbar kraft."
+  },
+  Flöde: {
+    title: "Flöde (Qi- & Blodcirkulation)",
+    description: "Mäter hur fritt Qi och Blod flödar genom kroppens meridianer. Högt flöde innebär fri passage utan blockeringar."
+  },
+};
 
 const MetricBar = ({ label, value, icon: Icon, color }: { label: string; value: number; icon: any; color: string }) => (
   <div className="space-y-2">
@@ -13,6 +29,19 @@ const MetricBar = ({ label, value, icon: Icon, color }: { label: string; value: 
       <div className="flex items-center gap-2 text-muted-foreground">
         <Icon className={`h-4 w-4 ${color}`} />
         <span>{label}</span>
+        {METRIC_EXPLANATIONS[label] && (
+          <Popover>
+            <PopoverTrigger asChild>
+              <button type="button" className="inline-flex">
+                <Info className="h-3.5 w-3.5 text-muted-foreground/60 hover:text-secondary transition-colors" />
+              </button>
+            </PopoverTrigger>
+            <PopoverContent className="w-80 p-4" side="top" align="start">
+              <p className="font-bold text-foreground mb-1">{METRIC_EXPLANATIONS[label].title}</p>
+              <p className="text-sm text-muted-foreground leading-relaxed">{METRIC_EXPLANATIONS[label].description}</p>
+            </PopoverContent>
+          </Popover>
+        )}
       </div>
       <span className="font-semibold">{value}%</span>
     </div>
@@ -48,7 +77,6 @@ const Index = () => {
       <motion.div initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }} className="mb-6">
         <p className="text-sm text-muted-foreground">Välkommen tillbaka{profile?.name ? `, ${profile.name}` : ""}</p>
         <h1 className="text-2xl font-bold">Din Hälsoöversikt</h1>
-        <p className="text-sm text-muted-foreground mt-1">Baserad på <TcmTerm termKey="tungdiagnostik">TCM-tungdiagnostik</TcmTerm></p>
       </motion.div>
 
       {/* Status Card */}
@@ -58,9 +86,22 @@ const Index = () => {
         transition={{ delay: 0.1 }}
         className="mb-6 rounded-2xl bg-midnight p-5 text-midnight-foreground"
       >
-        <p className="mb-1 text-xs uppercase tracking-wider text-midnight-foreground/60">Din Hälsostatus — TCM-analys</p>
+        <p className="mb-1 text-xs uppercase tracking-wider text-midnight-foreground/60">Din Hälsostatus</p>
         <h2 className="mb-1 text-xl font-bold">{diagnosis.name}</h2>
-        <p className="text-sm font-medium text-midnight-foreground/60 mb-1">{diagnosis.tcmName}</p>
+        <div className="flex items-center gap-2 mb-1">
+          <p className="text-sm font-medium text-midnight-foreground/60">{diagnosis.tcmName}</p>
+          <Popover>
+            <PopoverTrigger asChild>
+              <button type="button" className="inline-flex">
+                <Info className="h-4 w-4 text-midnight-foreground/40 hover:text-midnight-foreground/80 transition-colors" />
+              </button>
+            </PopoverTrigger>
+            <PopoverContent className="w-80 p-4" side="bottom" align="start">
+              <p className="font-bold text-foreground mb-1">{diagnosis.tcmName}</p>
+              <p className="text-sm text-muted-foreground leading-relaxed">{diagnosis.statusExplanation}</p>
+            </PopoverContent>
+          </Popover>
+        </div>
         <p className="text-sm text-midnight-foreground/70">{diagnosis.subtitle}</p>
         <div className="mt-3 flex items-center gap-2 text-xs text-midnight-foreground/50">
           <Calendar className="h-3.5 w-3.5" />
