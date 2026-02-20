@@ -10,22 +10,27 @@ import {
 interface TcmTermProps {
   termKey: string;
   children?: React.ReactNode;
+  variant?: "default" | "light";
 }
 
 /**
  * Renders a clickable TCM term with an info icon.
  * On click, shows a popover with the term's explanation.
  */
-const TcmTerm = ({ termKey, children }: TcmTermProps) => {
+const TcmTerm = ({ termKey, children, variant = "default" }: TcmTermProps) => {
   const entry: TcmGlossaryEntry | undefined = TCM_GLOSSARY[termKey];
   if (!entry) return <>{children || termKey}</>;
+
+  const buttonClass = variant === "light"
+    ? "inline-flex items-center gap-1 text-sand font-medium underline decoration-sand/60 decoration-dotted underline-offset-2 hover:decoration-sand transition-colors"
+    : "inline-flex items-center gap-1 text-secondary font-medium underline decoration-secondary/40 decoration-dotted underline-offset-2 hover:decoration-secondary transition-colors";
 
   return (
     <Popover>
       <PopoverTrigger asChild>
         <button
           type="button"
-          className="inline-flex items-center gap-1 text-secondary font-medium underline decoration-secondary/40 decoration-dotted underline-offset-2 hover:decoration-secondary transition-colors"
+          className={buttonClass}
         >
           {children || entry.term}
           <Info className="h-3.5 w-3.5 shrink-0 opacity-60" />
