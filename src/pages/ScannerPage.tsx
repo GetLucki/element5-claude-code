@@ -283,7 +283,7 @@ const ScannerPage = () => {
               <div className="absolute inset-0 rounded-full border-2 border-secondary/30 animate-ping" />
             </div>
             <h2 className="mb-2 text-xl font-bold">Analyserar...</h2>
-            <p className="text-sm text-muted-foreground">Din hälsa utvärderas holistiskt</p>
+            <p className="text-sm text-muted-foreground">Tungdiagnostik enligt TCM-principer</p>
             <div className="mt-6 flex gap-1">
               {[0, 1, 2].map((i) => (
                 <motion.div key={i} className="h-2 w-2 rounded-full bg-secondary" animate={{ opacity: [0.3, 1, 0.3] }} transition={{ duration: 1.2, repeat: Infinity, delay: i * 0.3 }} />
@@ -299,8 +299,9 @@ const ScannerPage = () => {
 
             {/* Status card */}
             <div className="mb-6 rounded-2xl bg-midnight p-5 text-midnight-foreground">
-              <p className="mb-1 text-xs uppercase tracking-wider text-midnight-foreground/60">Din Hälsostatus</p>
+              <p className="mb-1 text-xs uppercase tracking-wider text-midnight-foreground/60">Din Hälsostatus — TCM-analys</p>
               <h2 className="mb-1 text-xl font-bold">{diagnosis.name}</h2>
+              <p className="text-xs font-medium text-midnight-foreground/50 mb-1">{diagnosis.tcmName}</p>
               <p className="text-sm text-midnight-foreground/70">{diagnosis.subtitle}</p>
             </div>
 
@@ -311,7 +312,13 @@ const ScannerPage = () => {
               </div>
             )}
 
-            <p className="mb-6 text-sm text-muted-foreground">{diagnosis.description}</p>
+            <p className="mb-4 text-sm text-muted-foreground">{diagnosis.description}</p>
+
+            {/* TCM explanation */}
+            <div className="glass-card mb-6 p-4 border-l-4 border-secondary/50">
+              <p className="text-xs font-semibold uppercase tracking-wider text-secondary mb-1">Ur ett TCM-perspektiv</p>
+              <p className="text-sm text-muted-foreground leading-relaxed">{diagnosis.tcmExplanation}</p>
+            </div>
 
             {/* Metrics */}
             <div className="glass-card mb-6 p-5">
@@ -352,14 +359,18 @@ const ScannerPage = () => {
         {/* ===== PLAN PHASE ===== */}
         {phase === "plan" && diagnosis && (
           <motion.div key="plan" initial={{ opacity: 0, x: 40 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -40 }} transition={{ duration: 0.35 }}>
-            <h1 className="mb-6 text-2xl font-bold md:text-3xl">Din Åtgärdsplan</h1>
+            <h1 className="mb-2 text-2xl font-bold md:text-3xl">Din Åtgärdsplan</h1>
+            <p className="mb-6 text-sm text-muted-foreground">Baserad på TCM-principen: behandla roten, inte bara symptomen</p>
 
             {/* Food */}
             <div className="glass-card mb-4 p-5">
               <div className="mb-3 flex items-center gap-2">
                 <UtensilsCrossed className="h-5 w-5 text-secondary" />
-                <h3 className="font-semibold">Kost</h3>
+                <h3 className="font-semibold">Kost — Mat som Medicin</h3>
               </div>
+              {diagnosis.food.tcmNote && (
+                <p className="mb-3 text-xs text-muted-foreground italic border-l-2 border-secondary/30 pl-3">{diagnosis.food.tcmNote}</p>
+              )}
               <div className="mb-3">
                 <p className="mb-1 text-xs font-semibold uppercase tracking-wider text-success">Ät mer av</p>
                 <ul className="space-y-1 text-sm">
