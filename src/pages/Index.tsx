@@ -2,6 +2,7 @@ import { useHealth } from "@/context/HealthContext";
 import { useAuth } from "@/context/AuthContext";
 import { useNavigate } from "react-router-dom";
 import { Battery, Activity, Waves, TrendingUp, ScanLine, Calendar } from "lucide-react";
+import TcmTerm from "@/components/TcmTerm";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
 import { motion } from "framer-motion";
@@ -47,7 +48,7 @@ const Index = () => {
       <motion.div initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }} className="mb-6">
         <p className="text-sm text-muted-foreground">Välkommen tillbaka{profile?.name ? `, ${profile.name}` : ""}</p>
         <h1 className="text-2xl font-bold">Din Hälsoöversikt</h1>
-        <p className="text-xs text-muted-foreground mt-1">Baserad på TCM-tungdiagnostik</p>
+        <p className="text-sm text-muted-foreground mt-1">Baserad på <TcmTerm termKey="tungdiagnostik">TCM-tungdiagnostik</TcmTerm></p>
       </motion.div>
 
       {/* Status Card */}
@@ -59,7 +60,7 @@ const Index = () => {
       >
         <p className="mb-1 text-xs uppercase tracking-wider text-midnight-foreground/60">Din Hälsostatus — TCM-analys</p>
         <h2 className="mb-1 text-xl font-bold">{diagnosis.name}</h2>
-        <p className="text-xs font-medium text-midnight-foreground/50 mb-1">{diagnosis.tcmName}</p>
+        <p className="text-sm font-medium text-midnight-foreground/60 mb-1">{diagnosis.tcmName}</p>
         <p className="text-sm text-midnight-foreground/70">{diagnosis.subtitle}</p>
         <div className="mt-3 flex items-center gap-2 text-xs text-midnight-foreground/50">
           <Calendar className="h-3.5 w-3.5" />

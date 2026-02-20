@@ -4,6 +4,7 @@ import { useAuth } from "@/context/AuthContext";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Camera, Upload, ScanLine, Video, X, Activity, Battery, Waves, UtensilsCrossed, Pill, Snowflake, ChevronRight, History, CheckCircle2, Circle, CalendarClock, Dumbbell, Moon, ShieldAlert, Heart, AlertCircle } from "lucide-react";
+import TcmTerm from "@/components/TcmTerm";
 import { motion, AnimatePresence } from "framer-motion";
 import { useIsMobile } from "@/hooks/use-mobile";
 import { Progress } from "@/components/ui/progress";
@@ -283,7 +284,7 @@ const ScannerPage = () => {
               <div className="absolute inset-0 rounded-full border-2 border-secondary/30 animate-ping" />
             </div>
             <h2 className="mb-2 text-xl font-bold">Analyserar...</h2>
-            <p className="text-sm text-muted-foreground">Tungdiagnostik enligt TCM-principer</p>
+            <p className="text-sm text-muted-foreground"><TcmTerm termKey="tungdiagnostik">Tungdiagnostik</TcmTerm> enligt TCM-principer</p>
             <div className="mt-6 flex gap-1">
               {[0, 1, 2].map((i) => (
                 <motion.div key={i} className="h-2 w-2 rounded-full bg-secondary" animate={{ opacity: [0.3, 1, 0.3] }} transition={{ duration: 1.2, repeat: Infinity, delay: i * 0.3 }} />
@@ -301,13 +302,13 @@ const ScannerPage = () => {
             <div className="mb-6 rounded-2xl bg-midnight p-5 text-midnight-foreground">
               <p className="mb-1 text-xs uppercase tracking-wider text-midnight-foreground/60">Din Hälsostatus — TCM-analys</p>
               <h2 className="mb-1 text-xl font-bold">{diagnosis.name}</h2>
-              <p className="text-xs font-medium text-midnight-foreground/50 mb-1">{diagnosis.tcmName}</p>
+              <p className="text-sm font-medium text-midnight-foreground/60 mb-1">{diagnosis.tcmName}</p>
               <p className="text-sm text-midnight-foreground/70">{diagnosis.subtitle}</p>
             </div>
 
             {analysisSummary && (
               <div className="glass-card mb-4 p-4">
-                <p className="text-xs font-semibold uppercase tracking-wider text-secondary mb-1">Analyssammanfattning</p>
+                <p className="text-sm font-semibold uppercase tracking-wider text-secondary mb-2">Analyssammanfattning</p>
                 <p className="text-sm text-muted-foreground">{analysisSummary}</p>
               </div>
             )}
@@ -316,7 +317,7 @@ const ScannerPage = () => {
 
             {/* TCM explanation */}
             <div className="glass-card mb-6 p-4 border-l-4 border-secondary/50">
-              <p className="text-xs font-semibold uppercase tracking-wider text-secondary mb-1">Ur ett TCM-perspektiv</p>
+              <p className="text-sm font-semibold uppercase tracking-wider text-secondary mb-2">Ur ett <TcmTerm termKey="tungdiagnostik">TCM</TcmTerm>-perspektiv</p>
               <p className="text-sm text-muted-foreground leading-relaxed">{diagnosis.tcmExplanation}</p>
             </div>
 
@@ -336,7 +337,7 @@ const ScannerPage = () => {
               return symptoms?.length > 0 ? (
                 <div className="glass-card mb-6 p-5">
                   <h3 className="mb-3 font-semibold">Känner du igen dig?</h3>
-                  <p className="mb-3 text-xs text-muted-foreground">Baserat på analysen är dessa symptom vanliga vid din profil:</p>
+                  <p className="mb-3 text-sm text-muted-foreground">Baserat på analysen är dessa symptom vanliga vid din profil:</p>
                   <div className="space-y-2">
                     {symptoms.map((s) => (
                       <div key={s} className="flex items-center gap-3 rounded-xl bg-muted/50 px-4 py-2.5">
@@ -369,7 +370,7 @@ const ScannerPage = () => {
                 <h3 className="font-semibold">Kost — Mat som Medicin</h3>
               </div>
               {diagnosis.food.tcmNote && (
-                <p className="mb-3 text-xs text-muted-foreground italic border-l-2 border-secondary/30 pl-3">{diagnosis.food.tcmNote}</p>
+                <p className="mb-3 text-sm text-muted-foreground italic border-l-2 border-secondary/30 pl-3">{diagnosis.food.tcmNote}</p>
               )}
               <div className="mb-3">
                 <p className="mb-1 text-xs font-semibold uppercase tracking-wider text-success">Ät mer av</p>
