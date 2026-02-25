@@ -1,8 +1,8 @@
 export const zh: Record<string, string> = {
   // App
-  "app.name": "E5",
+  "app.name": "Element 5 Lab",
   "app.tagline": "以东方之图，解西方之梦。",
-  "app.version": "E5 v1.0",
+  "app.version": "Element 5 Lab v1.0",
 
   // Nav
   "nav.home": "首页",
@@ -12,7 +12,7 @@ export const zh: Record<string, string> = {
   "nav.profile": "我的",
 
   // Login
-  "login.title": "E5",
+  "login.title": "Element 5 Lab",
   "login.pitch": "唤醒你的生命力。",
   "login.subtitle": "以东方五行之法，解锁西方对生命力与长寿的终极追求。",
   "login.email": "电子邮箱",
@@ -32,7 +32,7 @@ export const zh: Record<string, string> = {
   "login.errorApple": "Apple 登录失败",
 
   // Onboarding
-  "onboarding.welcome": "欢迎使用 Element 5",
+  "onboarding.welcome": "欢迎使用 Element 5 Lab",
   "onboarding.intro": "请简单介绍一下自己，以便我们为你量身定制。",
   "onboarding.name": "你的名字",
   "onboarding.namePlaceholder": "名",
@@ -59,7 +59,8 @@ export const zh: Record<string, string> = {
   "onboarding.goalStress": "压力管理",
 
   // Home
-  "home.welcomeBack": "欢迎回来",
+  "home.welcomeBack": "欢迎来到 Element 5",
+  "home.welcomeText": "一个专注于你的生命体征和可控因素的健康实验室，帮助你活得更健康、更长久、更愉快。",
   "home.overview": "你的健康概览",
   "home.noScan": "尚未扫描",
   "home.noScanDesc": "完成首次扫描，查看你的健康状况",
@@ -164,6 +165,7 @@ export const zh: Record<string, string> = {
   "history.firstScan": "首次扫描",
   "history.latestScan": "最近扫描",
   "history.timeline": "时间线",
+  "history.guestGate": "登录或创建账号以跟踪你的健康旅程并查看进展。",
 
   // Profile
   "profile.title": "个人中心",
@@ -179,6 +181,8 @@ export const zh: Record<string, string> = {
   "guest.signUpCta": "创建账号以保存",
   "guest.signUp": "创建账号",
   "guest.onlyDemo": "访客模式下可体验示例体质。",
+  "guest.nudgeTitle": "想保存你的结果吗？",
+  "guest.nudgeDesc": "创建一个免费账号来保存进展、跟踪历史并获得个性化方案。",
 
   // Days
   "day.mon": "一",

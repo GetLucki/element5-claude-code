@@ -51,8 +51,8 @@ const Index = () => {
     return (
       <div className="flex min-h-[80vh] flex-col items-center justify-center px-6 text-center">
         <ScanLine className="mb-4 h-12 w-12 text-muted-foreground" />
-        <h2 className="mb-2 text-xl font-semibold">{t("home.noScan")}</h2>
-        <p className="mb-6 text-muted-foreground">{t("home.noScanDesc")}</p>
+        <h2 className="mb-2 text-xl font-semibold">{t("home.welcomeBack")}</h2>
+        <p className="mb-6 max-w-sm text-muted-foreground leading-relaxed">{t("home.welcomeText")}</p>
         <Button onClick={() => navigate("/scanner")} className="rounded-xl bg-secondary px-8 py-6 text-base font-semibold text-secondary-foreground">
           {t("home.startScan")}
         </Button>
@@ -69,6 +69,7 @@ const Index = () => {
       <motion.div initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }} className="mb-6">
         <p className="text-sm text-muted-foreground">{t("home.welcomeBack")}{profile?.name ? `, ${profile.name}` : ""}</p>
         <h1 className="text-2xl font-bold">{t("home.overview")}</h1>
+        <p className="mt-1 text-sm text-muted-foreground leading-relaxed max-w-sm">{t("home.welcomeText")}</p>
       </motion.div>
 
       <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }} className="mb-6 overflow-hidden rounded-2xl bg-midnight p-5 text-midnight-foreground relative">

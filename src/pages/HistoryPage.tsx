@@ -13,17 +13,20 @@ const HistoryPage = () => {
   const { t } = useLanguage();
   const navigate = useNavigate();
 
-  // Guest CTA
-  if (isGuest && scans.length === 0) {
+  // Gate history behind auth for guests
+  if (isGuest) {
     return (
       <div className="flex min-h-[80vh] flex-col items-center justify-center px-6 text-center">
         <motion.div initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }}>
           <User className="mx-auto mb-4 h-12 w-12 text-muted-foreground" />
           <h2 className="mb-2 text-xl font-semibold">{t("history.title")}</h2>
-          <p className="mb-6 text-muted-foreground">{t("guest.signUpCta")}</p>
-          <Button onClick={() => navigate("/scanner")} className="rounded-xl bg-secondary px-8 py-6 text-base font-semibold text-secondary-foreground">
-            {t("history.startScan")}
+          <p className="mb-4 text-muted-foreground max-w-xs">{t("history.guestGate")}</p>
+          <Button onClick={() => navigate("/login")} className="rounded-xl bg-secondary px-8 py-6 text-base font-semibold text-secondary-foreground">
+            {t("login.signIn")}
           </Button>
+          <button onClick={() => navigate("/login")} className="mt-3 text-sm text-muted-foreground hover:text-foreground transition-colors">
+            {t("login.switchToSignUp")}
+          </button>
         </motion.div>
       </div>
     );

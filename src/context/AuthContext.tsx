@@ -41,7 +41,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [session, setSession] = useState<Session | null>(null);
   const [profile, setProfile] = useState<UserProfile | null>(null);
   const [loading, setLoading] = useState(true);
-  const [isGuest, setIsGuest] = useState(false);
+  const [isGuest, setIsGuest] = useState(true); // Default to guest mode
 
   const loadProfile = useCallback(async (userId: string) => {
     const { data } = await supabase
@@ -86,7 +86,21 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       setSession(session);
       setUser(session?.user ?? null);
       if (session?.user) {
+        setIsGuest(false);
         loadProfile(session.user.id);
+      } else {
+        // Auto-enter guest mode with dummy profile
+        setIsGuest(true);
+        setProfile({
+          id: "guest",
+          name: null,
+          avatar_url: null,
+          age_range: null,
+          gender: null,
+          has_menstruation: null,
+          health_goals: [],
+          onboarding_completed: true,
+        });
       }
       setLoading(false);
     });
