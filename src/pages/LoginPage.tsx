@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useAuth } from "@/context/AuthContext";
 import { useLanguage } from "@/context/LanguageContext";
+import { useNavigate } from "react-router-dom";
 import { lovable } from "@/integrations/lovable/index";
 import { Button } from "@/components/ui/button";
 import { Leaf, Loader2 } from "lucide-react";
@@ -10,8 +11,9 @@ import LanguageSelector from "@/components/LanguageSelector";
 import loginBgVideo from "@/assets/login-bg.mp4";
 
 const LoginPage = () => {
-  const { signIn, signUp, enterGuestMode } = useAuth();
+  const { signIn, signUp, enterGuestMode, exitGuestMode } = useAuth();
   const { t } = useLanguage();
+  const navigate = useNavigate();
   const [isSignUp, setIsSignUp] = useState(false);
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
@@ -33,6 +35,8 @@ const LoginPage = () => {
       const { error } = await signIn(email, password);
       if (error) {
         toast.error(t("login.errorCredentials"));
+      } else {
+        navigate("/");
       }
     }
     setLoading(false);
@@ -144,7 +148,7 @@ const LoginPage = () => {
             type="button"
             variant="ghost"
             className="w-full rounded-xl py-5 text-midnight-foreground/70 hover:text-midnight-foreground/90 hover:bg-midnight-foreground/5"
-            onClick={enterGuestMode}
+            onClick={() => { enterGuestMode(); navigate("/"); }}
           >
             {t("login.guestMode")}
           </Button>

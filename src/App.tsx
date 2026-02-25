@@ -12,6 +12,7 @@ import ScannerPage from "./pages/ScannerPage";
 import PlanPage from "./pages/PlanPage";
 import HistoryPage from "./pages/HistoryPage";
 import ProfilePage from "./pages/ProfilePage";
+import LoginPage from "./pages/LoginPage";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -33,6 +34,7 @@ const App = () => {
                     <Route path="/plan" element={<PlanPage />} />
                     <Route path="/history" element={<HistoryPage />} />
                     <Route path="/profile" element={<ProfilePage />} />
+                    <Route path="/login" element={<LoginPage />} />
                     <Route path="*" element={<NotFound />} />
                   </Routes>
                 </AppLayout>

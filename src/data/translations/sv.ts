@@ -1,8 +1,8 @@
 export const sv: Record<string, string> = {
   // App
-  "app.name": "E5",
+  "app.name": "Element 5 Lab",
   "app.tagline": "Den västerländska drömmen, upplåst med den österländska kartan.",
-  "app.version": "E5 v1.0",
+  "app.version": "Element 5 Lab v1.0",
 
   // Nav
   "nav.home": "Hem",
@@ -12,7 +12,7 @@ export const sv: Record<string, string> = {
   "nav.profile": "Profil",
 
   // Login
-  "login.title": "E5",
+  "login.title": "Element 5 Lab",
   "login.pitch": "Lås upp din livskraft.",
   "login.subtitle": "Vi använder den österländska kartan för att låsa upp den västerländska drömmen — funktionell livslängd genom de fem faserna.",
   "login.email": "E-postadress",
@@ -32,7 +32,7 @@ export const sv: Record<string, string> = {
   "login.errorApple": "Apple-inloggning misslyckades",
 
   // Onboarding
-  "onboarding.welcome": "Välkommen till Element 5",
+  "onboarding.welcome": "Välkommen till Element 5 Lab",
   "onboarding.intro": "Berätta lite om dig så att vi kan anpassa din upplevelse.",
   "onboarding.name": "Ditt namn",
   "onboarding.namePlaceholder": "Förnamn",
@@ -59,7 +59,8 @@ export const sv: Record<string, string> = {
   "onboarding.goalStress": "Stresshantering",
 
   // Home
-  "home.welcomeBack": "Välkommen tillbaka",
+  "home.welcomeBack": "Välkommen till Element 5",
+  "home.welcomeText": "Ett hälsolabb som fokuserar på dina vitala värden och faktorer du kan kontrollera för att hjälpa dig leva ett friskare, längre och mer njutbart liv.",
   "home.overview": "Din Hälsoöversikt",
   "home.noScan": "Ingen scanning ännu",
   "home.noScanDesc": "Gör din första scanning för att se din hälsostatus",
@@ -164,6 +165,7 @@ export const sv: Record<string, string> = {
   "history.firstScan": "Första Scan",
   "history.latestScan": "Senaste Scan",
   "history.timeline": "Tidslinjen",
+  "history.guestGate": "Logga in eller skapa ett konto för att följa din hälsoresa över tid och se dina framsteg.",
 
   // Profile
   "profile.title": "Profil",
@@ -179,6 +181,8 @@ export const sv: Record<string, string> = {
   "guest.signUpCta": "Skapa konto för att spara",
   "guest.signUp": "Skapa konto",
   "guest.onlyDemo": "I gästläge kan du testa med demoprofiler.",
+  "guest.nudgeTitle": "Vill du spara dina resultat?",
+  "guest.nudgeDesc": "Skapa ett gratis konto för att spara dina framsteg, följa historik och få personliga planer över tid.",
 
   // Days
   "day.mon": "Mån",

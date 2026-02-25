@@ -28,7 +28,7 @@ const ProfilePage = () => {
           <User className="mx-auto mb-4 h-12 w-12 text-muted-foreground" />
           <h2 className="mb-2 text-xl font-semibold">{t("profile.title")}</h2>
           <p className="mb-6 text-muted-foreground">{t("guest.signUpCta")}</p>
-          <Button onClick={() => { navigate("/"); window.location.reload(); }} className="rounded-xl bg-secondary px-8 py-6 text-base font-semibold text-secondary-foreground">
+          <Button onClick={() => navigate("/login")} className="rounded-xl bg-secondary px-8 py-6 text-base font-semibold text-secondary-foreground">
             {t("guest.signUp")}
           </Button>
 

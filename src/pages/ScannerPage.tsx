@@ -208,7 +208,7 @@ const ScannerPage = () => {
               </div>
             )}
 
-            {!preview && !showWebcam && !isGuest && (
+            {!preview && !showWebcam && (
               <div className="mb-6 flex flex-col items-center justify-center rounded-2xl border-2 border-dashed border-border/70 bg-card/50 p-10 md:p-14">
                 <div className="mb-4 flex h-20 w-20 items-center justify-center rounded-full bg-muted"><Camera className="h-8 w-8 text-muted-foreground" /></div>
                 <p className="mb-2 font-semibold">{t("scanner.uploadPhoto")}</p>
@@ -229,11 +229,6 @@ const ScannerPage = () => {
               </div>
             )}
 
-            {isGuest && !preview && !showWebcam && (
-              <div className="mb-6 rounded-2xl bg-muted/50 p-5 text-center">
-                <p className="text-sm text-muted-foreground mb-2">{t("guest.onlyDemo")}</p>
-              </div>
-            )}
 
             <Collapsible defaultOpen={isGuest} className="mb-4">
               <CollapsibleTrigger className="flex w-full items-center justify-between rounded-xl bg-muted/50 px-4 py-3 text-sm font-medium text-muted-foreground hover:bg-muted/70 transition-colors">
@@ -323,6 +318,17 @@ const ScannerPage = () => {
             <Button onClick={() => setPhase("plan")} className="w-full rounded-2xl bg-secondary py-6 text-base font-semibold text-secondary-foreground shadow-lg hover:bg-secondary/90">
               {t("result.showPlan")}<ChevronRight className="ml-2 h-5 w-5" />
             </Button>
+
+            {/* Signup nudge for guests */}
+            {isGuest && (
+              <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.3 }} className="mt-4 rounded-2xl border border-secondary/30 bg-secondary/5 p-4 text-center">
+                <p className="text-sm font-medium mb-1">{t("guest.nudgeTitle")}</p>
+                <p className="text-xs text-muted-foreground mb-3">{t("guest.nudgeDesc")}</p>
+                <Button onClick={() => navigate("/login")} variant="outline" className="rounded-xl border-secondary/40 text-secondary hover:bg-secondary/10">
+                  {t("guest.signUp")}
+                </Button>
+              </motion.div>
+            )}
           </motion.div>
         )}
 
@@ -433,9 +439,20 @@ const ScannerPage = () => {
               );
             })()}
 
-            <Button onClick={() => { if (previousScans) setPhase("history"); else navigate("/"); }} className="w-full rounded-2xl bg-secondary py-6 text-base font-semibold text-secondary-foreground shadow-lg hover:bg-secondary/90">
-              {previousScans ? <>{t("plan.seeHistory")}<ChevronRight className="ml-2 h-5 w-5" /></> : t("plan.done")}
+            <Button onClick={() => { if (previousScans && !isGuest) setPhase("history"); else navigate("/"); }} className="w-full rounded-2xl bg-secondary py-6 text-base font-semibold text-secondary-foreground shadow-lg hover:bg-secondary/90">
+              {previousScans && !isGuest ? <>{t("plan.seeHistory")}<ChevronRight className="ml-2 h-5 w-5" /></> : t("plan.done")}
             </Button>
+
+            {/* Signup nudge for guests */}
+            {isGuest && (
+              <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.3 }} className="mt-4 rounded-2xl border border-secondary/30 bg-secondary/5 p-4 text-center">
+                <p className="text-sm font-medium mb-1">{t("guest.nudgeTitle")}</p>
+                <p className="text-xs text-muted-foreground mb-3">{t("guest.nudgeDesc")}</p>
+                <Button onClick={() => navigate("/login")} variant="outline" className="rounded-xl border-secondary/40 text-secondary hover:bg-secondary/10">
+                  {t("guest.signUp")}
+                </Button>
+              </motion.div>
+            )}
           </motion.div>
         )}
 

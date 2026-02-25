@@ -1,8 +1,8 @@
 export const en: Record<string, string> = {
   // App
-  "app.name": "E5",
+  "app.name": "Element 5 Lab",
   "app.tagline": "The Western dream, unlocked by the Eastern map.",
-  "app.version": "E5 v1.0",
+  "app.version": "Element 5 Lab v1.0",
 
   // Nav
   "nav.home": "Home",
@@ -12,7 +12,7 @@ export const en: Record<string, string> = {
   "nav.profile": "Profile",
 
   // Login
-  "login.title": "E5",
+  "login.title": "Element 5 Lab",
   "login.pitch": "Unlock your vital force.",
   "login.subtitle": "We use the ancient Eastern map to unlock the Western dream — functional longevity through the Five Phases.",
   "login.email": "Email address",
@@ -32,7 +32,7 @@ export const en: Record<string, string> = {
   "login.errorApple": "Apple sign-in failed",
 
   // Onboarding
-  "onboarding.welcome": "Welcome to Element 5",
+  "onboarding.welcome": "Welcome to Element 5 Lab",
   "onboarding.intro": "Tell us a bit about yourself so we can personalize your experience.",
   "onboarding.name": "Your name",
   "onboarding.namePlaceholder": "First name",
@@ -59,7 +59,8 @@ export const en: Record<string, string> = {
   "onboarding.goalStress": "Stress management",
 
   // Home
-  "home.welcomeBack": "Welcome back",
+  "home.welcomeBack": "Welcome to Element 5",
+  "home.welcomeText": "A health lab focusing on your vitals and factors you can control to help you live a healthier, longer, more enjoyable life.",
   "home.overview": "Your Health Overview",
   "home.noScan": "No scan yet",
   "home.noScanDesc": "Complete your first scan to see your health status",
@@ -164,6 +165,7 @@ export const en: Record<string, string> = {
   "history.firstScan": "First Scan",
   "history.latestScan": "Latest Scan",
   "history.timeline": "Timeline",
+  "history.guestGate": "Sign in or create an account to track your health journey over time and see your progress.",
 
   // Profile
   "profile.title": "Profile",
@@ -179,6 +181,8 @@ export const en: Record<string, string> = {
   "guest.signUpCta": "Create an account to save",
   "guest.signUp": "Create account",
   "guest.onlyDemo": "In guest mode you can try demo profiles.",
+  "guest.nudgeTitle": "Want to save your results?",
+  "guest.nudgeDesc": "Create a free account to save your progress, track history, and get personalized plans over time.",
 
   // Days
   "day.mon": "Mon",

@@ -94,10 +94,13 @@
 
   html {
     scroll-behavior: smooth;
+    overflow-x: hidden;
   }
 
   body {
     @apply bg-background text-foreground font-sans antialiased;
+    overflow-x: hidden;
+    -webkit-text-size-adjust: 100%;
   }
 }
 
