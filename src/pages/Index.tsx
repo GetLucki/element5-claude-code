@@ -50,12 +50,19 @@ const Index = () => {
   if (!currentScan) {
     return (
       <div className="flex min-h-[80vh] flex-col items-center justify-center px-6 text-center">
-        <ScanLine className="mb-4 h-12 w-12 text-muted-foreground" />
-        <h2 className="mb-2 text-xl font-semibold">{t("home.welcomeBack")}</h2>
-        <p className="mb-6 max-w-sm text-muted-foreground leading-relaxed">{t("home.welcomeText")}</p>
-        <Button onClick={() => navigate("/scanner")} className="rounded-xl bg-secondary px-8 py-6 text-base font-semibold text-secondary-foreground">
-          {t("home.startScan")}
-        </Button>
+        <motion.div initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }} transition={{ duration: 0.5 }} className="mb-8">
+          <div className="mx-auto mb-6 flex h-20 w-20 items-center justify-center rounded-2xl bg-secondary/15">
+            <ScanLine className="h-10 w-10 text-secondary" />
+          </div>
+          <h2 className="mb-2 text-2xl font-bold">{t("home.welcomeBack")}</h2>
+          <p className="mx-auto max-w-[280px] text-sm text-muted-foreground leading-relaxed">{t("home.readyToScan")}</p>
+        </motion.div>
+        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.3 }}>
+          <Button onClick={() => navigate("/scanner")} className="group rounded-2xl bg-secondary px-10 py-6 text-base font-semibold text-secondary-foreground shadow-lg hover:bg-secondary/90 hover:shadow-xl transition-all">
+            <ScanLine className="mr-2 h-5 w-5 transition-transform group-hover:scale-110" />
+            {t("home.startScan")}
+          </Button>
+        </motion.div>
       </div>
     );
   }

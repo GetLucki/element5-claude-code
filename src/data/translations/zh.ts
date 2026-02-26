@@ -64,6 +64,7 @@ export const zh: Record<string, string> = {
   "home.overview": "你的健康概览",
   "home.noScan": "尚未扫描",
   "home.noScanDesc": "完成首次扫描，查看你的健康状况",
+  "home.readyToScan": "快速舌诊扫描，发现你的健康平衡。",
   "home.startScan": "开始扫描",
   "home.status": "你的健康状态",
   "home.metrics": "你的健康指标",

@@ -21,12 +21,14 @@ const HistoryPage = () => {
           <User className="mx-auto mb-4 h-12 w-12 text-muted-foreground" />
           <h2 className="mb-2 text-xl font-semibold">{t("history.title")}</h2>
           <p className="mb-4 text-muted-foreground max-w-xs">{t("history.guestGate")}</p>
-          <Button onClick={() => navigate("/login")} className="rounded-xl bg-secondary px-8 py-6 text-base font-semibold text-secondary-foreground">
-            {t("login.signIn")}
-          </Button>
-          <button onClick={() => navigate("/login")} className="mt-3 text-sm text-muted-foreground hover:text-foreground transition-colors">
-            {t("login.switchToSignUp")}
-          </button>
+          <div className="flex flex-col items-center gap-3 w-full max-w-xs">
+            <Button onClick={() => navigate("/login")} className="w-full rounded-xl bg-secondary px-8 py-6 text-base font-semibold text-secondary-foreground">
+              {t("login.signIn")}
+            </Button>
+            <button onClick={() => navigate("/login")} className="text-sm text-muted-foreground hover:text-foreground transition-colors">
+              {t("login.switchToSignUp")}
+            </button>
+          </div>
         </motion.div>
       </div>
     );

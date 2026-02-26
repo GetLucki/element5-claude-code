@@ -64,6 +64,7 @@ export const en: Record<string, string> = {
   "home.overview": "Your Health Overview",
   "home.noScan": "No scan yet",
   "home.noScanDesc": "Complete your first scan to see your health status",
+  "home.readyToScan": "Take a quick tongue scan to discover your health balance.",
   "home.startScan": "Start Scan",
   "home.status": "Your Health Status",
   "home.metrics": "Your Health Metrics",
