@@ -64,6 +64,7 @@ export const sv: Record<string, string> = {
   "home.overview": "Din Hälsoöversikt",
   "home.noScan": "Ingen scanning ännu",
   "home.noScanDesc": "Gör din första scanning för att se din hälsostatus",
+  "home.readyToScan": "Ta en snabb tungscanning för att upptäcka din hälsobalans.",
   "home.startScan": "Starta Scanning",
   "home.status": "Din Hälsostatus",
   "home.metrics": "Dina Hälsovärden",
