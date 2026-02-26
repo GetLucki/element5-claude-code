@@ -41,7 +41,8 @@ export const useHealth = () => {
 
 export const HealthProvider = ({ children }: { children: ReactNode }) => {
   const { user, isGuest } = useAuth();
-  const { locale } = useLanguage();
+  const langCtx = useLanguage();
+  const locale = langCtx.locale;
   const [scans, setScans] = useState<ScanResult[]>([]);
   const [checklist, setChecklist] = useState<ChecklistState>({});
   const [loading, setLoading] = useState(true);
