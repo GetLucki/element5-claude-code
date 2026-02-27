@@ -23,7 +23,7 @@ interface ChecklistState {
 interface HealthContextType {
   scans: ScanResult[];
   currentScan: ScanResult | null;
-  addScan: (diagnosisId: DiagnosisId) => Promise<void>;
+  addScan: (diagnosisId: DiagnosisId, customMetrics?: { balans: number; energi: number; flode: number }) => Promise<void>;
   getDiagnosis: (id: DiagnosisId) => DiagnosisScenario;
   checklist: ChecklistState;
   toggleCheckItem: (day: number, item: string) => void;
@@ -103,24 +103,26 @@ export const HealthProvider = ({ children }: { children: ReactNode }) => {
     if (currentScan && !isGuest) { loadChecklist(currentScan.id); } else { setChecklist({}); }
   }, [currentScan?.id, loadChecklist, isGuest]);
 
-  const addScan = async (diagnosisId: DiagnosisId) => {
+  const addScan = async (diagnosisId: DiagnosisId, customMetrics?: { balans: number; energi: number; flode: number }) => {
+    // Use AI-generated metrics if provided, otherwise fall back to scenario defaults
+    const scenario = SCENARIOS[diagnosisId];
+    const metrics = customMetrics ?? { balans: scenario.metrics.balans, energi: scenario.metrics.energi, flode: scenario.metrics.flode };
+
     if (isGuest) {
-      // Guest mode: local-only scan
-      const scenario = SCENARIOS[diagnosisId];
+      // Guest mode: local-only scan (AI metrics still reflected locally)
       const guestScan: ScanResult = {
         id: `guest-${Date.now()}`,
         date: new Date().toISOString().slice(0, 10),
         diagnosisId,
-        metrics: { balans: scenario.metrics.balans, energi: scenario.metrics.energi, flode: scenario.metrics.flode },
+        metrics,
       };
       setScans((prev) => [...prev, guestScan]);
       return;
     }
     if (!user) return;
-    const scenario = SCENARIOS[diagnosisId];
     const { data, error } = await supabase
       .from("scans")
-      .insert({ user_id: user.id, diagnosis_id: diagnosisId, balans: scenario.metrics.balans, energi: scenario.metrics.energi, flode: scenario.metrics.flode })
+      .insert({ user_id: user.id, diagnosis_id: diagnosisId, balans: metrics.balans, energi: metrics.energi, flode: metrics.flode })
       .select().single();
     if (!error && data) {
       setScans((prev) => [...prev, { id: data.id, date: data.scanned_at, diagnosisId: data.diagnosis_id as DiagnosisId, metrics: { balans: data.balans, energi: data.energi, flode: data.flode } }]);

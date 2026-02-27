@@ -135,11 +135,13 @@ const ScannerPage = () => {
       if (error) throw error;
       if (data?.error) throw new Error(data.error);
       const diagnosisId = data.diagnosis_id as DiagnosisId;
+      const aiMetrics = { balans: data.balans, energi: data.energi, flode: data.flode };
       setSelectedProfile(diagnosisId);
       setAnalysisSummary(data.analysis_summary);
-      setCustomMetrics({ balans: data.balans, energi: data.energi, flode: data.flode });
+      setCustomMetrics(aiMetrics);
       if (data.likely_symptoms?.length) setLikelySymptoms(data.likely_symptoms);
-      await addScan(diagnosisId);
+      // Pass AI-generated metrics so they are saved to DB (not the hardcoded scenario defaults)
+      await addScan(diagnosisId, aiMetrics);
       setPhase("result");
     } catch (err: any) {
       console.error("AI analysis failed:", err);
