@@ -30,6 +30,12 @@ export const en: Record<string, string> = {
   "login.errorCredentials": "Incorrect email or password",
   "login.errorGoogle": "Google sign-in failed",
   "login.errorApple": "Apple sign-in failed",
+  "login.forgotPassword": "Forgot password?",
+  "login.resetPasswordTitle": "Reset password",
+  "login.resetPasswordDesc": "Enter your email address and we'll send you a link to reset your password.",
+  "login.sendResetLink": "Send reset link",
+  "login.resetLinkSent": "Check your email! A reset link has been sent.",
+  "login.backToSignIn": "Back to sign in",
 
   // Onboarding
   "onboarding.welcome": "Welcome to Element 5 Lab",

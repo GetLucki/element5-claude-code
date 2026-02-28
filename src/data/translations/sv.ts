@@ -30,6 +30,12 @@ export const sv: Record<string, string> = {
   "login.errorCredentials": "Fel e-post eller lösenord",
   "login.errorGoogle": "Google-inloggning misslyckades",
   "login.errorApple": "Apple-inloggning misslyckades",
+  "login.forgotPassword": "Glömt lösenordet?",
+  "login.resetPasswordTitle": "Återställ lösenord",
+  "login.resetPasswordDesc": "Ange din e-postadress så skickar vi en länk för att återställa ditt lösenord.",
+  "login.sendResetLink": "Skicka återställningslänk",
+  "login.resetLinkSent": "Kolla din e-post! En återställningslänk har skickats.",
+  "login.backToSignIn": "Tillbaka till inloggning",
 
   // Onboarding
   "onboarding.welcome": "Välkommen till Element 5 Lab",

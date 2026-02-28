@@ -30,6 +30,12 @@ export const zh: Record<string, string> = {
   "login.errorCredentials": "邮箱或密码错误",
   "login.errorGoogle": "Google 登录失败",
   "login.errorApple": "Apple 登录失败",
+  "login.forgotPassword": "忘记密码？",
+  "login.resetPasswordTitle": "重置密码",
+  "login.resetPasswordDesc": "请输入你的电子邮箱，我们将发送密码重置链接。",
+  "login.sendResetLink": "发送重置链接",
+  "login.resetLinkSent": "请查收邮件！密码重置链接已发送。",
+  "login.backToSignIn": "返回登录",
 
   // Onboarding
   "onboarding.welcome": "欢迎使用 Element 5 Lab",

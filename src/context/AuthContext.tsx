@@ -21,6 +21,7 @@ interface AuthContextType {
   isGuest: boolean;
   signUp: (email: string, password: string, name: string) => Promise<{ error: string | null }>;
   signIn: (email: string, password: string) => Promise<{ error: string | null }>;
+  resetPassword: (email: string) => Promise<{ error: string | null }>;
   signOut: () => Promise<void>;
   enterGuestMode: () => void;
   exitGuestMode: () => void;
@@ -125,6 +126,13 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     return { error: error?.message ?? null };
   };
 
+  const resetPassword = async (email: string) => {
+    const { error } = await supabase.auth.resetPasswordForEmail(email, {
+      redirectTo: `${window.location.origin}/login`,
+    });
+    return { error: error?.message ?? null };
+  };
+
   const signOut = async () => {
     await supabase.auth.signOut();
     setProfile(null);
@@ -161,7 +169,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   };
 
   return (
-    <AuthContext.Provider value={{ user, session, profile, loading, isGuest, signUp, signIn, signOut, enterGuestMode, exitGuestMode, updateProfile, refreshProfile }}>
+    <AuthContext.Provider value={{ user, session, profile, loading, isGuest, signUp, signIn, resetPassword, signOut, enterGuestMode, exitGuestMode, updateProfile, refreshProfile }}>
       {children}
     </AuthContext.Provider>
   );

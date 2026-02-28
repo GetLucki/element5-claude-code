@@ -2,10 +2,22 @@ import { useHealth } from "@/context/HealthContext";
 import { useAuth } from "@/context/AuthContext";
 import { useLanguage } from "@/context/LanguageContext";
 import { useNavigate } from "react-router-dom";
-import { Activity, Battery, Waves, CheckCircle2, ScanLine, CalendarClock, User } from "lucide-react";
+import { Activity, Battery, Waves, CheckCircle2, ScanLine, CalendarClock, User, TrendingUp, TrendingDown, Minus } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { motion } from "framer-motion";
-import { LineChart, Line, XAxis, YAxis, ResponsiveContainer, Tooltip } from "recharts";
+import {
+  LineChart, Line, XAxis, YAxis, ResponsiveContainer, Tooltip,
+  RadarChart, Radar, PolarGrid, PolarAngleAxis, PolarRadiusAxis,
+} from "recharts";
+
+// Shows ↑ / → / ↓ comparing current vs previous metric value
+function TrendIcon({ current, prev }: { current: number; prev: number | undefined }) {
+  if (prev === undefined) return null;
+  const diff = current - prev;
+  if (diff > 2) return <TrendingUp className="h-3 w-3 text-green-500" />;
+  if (diff < -2) return <TrendingDown className="h-3 w-3 text-red-400" />;
+  return <Minus className="h-3 w-3 text-muted-foreground" />;
+}
 
 const HistoryPage = () => {
   const { scans, getDiagnosis, getComplianceForScan } = useHealth();
@@ -50,6 +62,18 @@ const HistoryPage = () => {
     );
   }
 
+  const firstScan = scans[0];
+  const lastScan = scans[scans.length - 1];
+  const firstDiag = firstScan ? getDiagnosis(firstScan.diagnosisId) : null;
+  const lastDiag = lastScan ? getDiagnosis(lastScan.diagnosisId) : null;
+  const currentCompliance = lastScan ? getComplianceForScan(lastScan.id) : 0;
+
+  const radarData = lastScan ? [
+    { metric: t("metric.balance"), value: lastScan.metrics.balans },
+    { metric: t("metric.energy"), value: lastScan.metrics.energi },
+    { metric: t("metric.flow"), value: lastScan.metrics.flode },
+  ] : [];
+
   const chartData = scans.map((s) => ({
     date: s.date.slice(5),
     [t("metric.balance")]: s.metrics.balans,
@@ -57,11 +81,7 @@ const HistoryPage = () => {
     [t("metric.flow")]: s.metrics.flode,
   }));
 
-  const firstScan = scans[0];
-  const lastScan = scans[scans.length - 1];
-  const firstDiag = firstScan ? getDiagnosis(firstScan.diagnosisId) : null;
-  const lastDiag = lastScan ? getDiagnosis(lastScan.diagnosisId) : null;
-  const currentCompliance = lastScan ? getComplianceForScan(lastScan.id) : 0;
+  const reversedScans = [...scans].reverse();
 
   // Single scan state
   if (scans.length === 1) {
@@ -73,20 +93,25 @@ const HistoryPage = () => {
           <p className="mb-6 text-sm text-muted-foreground">{t("history.scanTotal1")}</p>
         </motion.div>
 
-        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }} className="glass-card mb-6 p-5">
-          <div className="flex items-center gap-4">
-            <div className="flex h-10 w-10 items-center justify-center rounded-full bg-secondary/20 text-secondary font-bold text-sm">
-              {scans[0].date.slice(8)}
-            </div>
-            <div className="flex-1">
-              <p className="font-medium">{diag.name}</p>
-              <p className="text-xs text-muted-foreground">{scans[0].date}</p>
-            </div>
-            <div className="text-right text-xs text-muted-foreground">
-              <p>B: {scans[0].metrics.balans}%</p>
-              <p>E: {scans[0].metrics.energi}%</p>
-              <p>F: {scans[0].metrics.flode}%</p>
-            </div>
+        {/* Radar chart for single scan */}
+        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.05 }} className="glass-card mb-6 p-5">
+          <h3 className="mb-1 font-semibold">{t("result.status")}</h3>
+          <p className="mb-4 text-xs text-muted-foreground">{diag.name}</p>
+          <div className="h-52">
+            <ResponsiveContainer width="100%" height="100%">
+              <RadarChart data={radarData} margin={{ top: 0, right: 20, bottom: 0, left: 20 }}>
+                <PolarGrid stroke="hsl(var(--border))" />
+                <PolarAngleAxis dataKey="metric" tick={{ fontSize: 12, fill: "hsl(var(--muted-foreground))" }} />
+                <PolarRadiusAxis domain={[0, 100]} tick={false} axisLine={false} />
+                <Radar name="score" dataKey="value" stroke="hsl(var(--secondary))" fill="hsl(var(--secondary))" fillOpacity={0.25} dot={{ r: 4, fill: "hsl(var(--secondary))" }} />
+                <Tooltip contentStyle={{ backgroundColor: "hsl(var(--card))", border: "1px solid hsl(var(--border))", borderRadius: "0.75rem", fontSize: "12px" }} />
+              </RadarChart>
+            </ResponsiveContainer>
+          </div>
+          <div className="mt-1 grid grid-cols-3 gap-2 text-center text-xs">
+            <div><span className="font-semibold text-secondary">{scans[0].metrics.balans}</span><br /><span className="text-muted-foreground">{t("metric.balance")}</span></div>
+            <div><span className="font-semibold" style={{ color: "hsl(var(--warm))" }}>{scans[0].metrics.energi}</span><br /><span className="text-muted-foreground">{t("metric.energy")}</span></div>
+            <div><span className="font-semibold" style={{ color: "hsl(var(--ring))" }}>{scans[0].metrics.flode}</span><br /><span className="text-muted-foreground">{t("metric.flow")}</span></div>
           </div>
         </motion.div>
 
@@ -136,8 +161,32 @@ const HistoryPage = () => {
         </motion.div>
       )}
 
-      {/* Chart */}
-      <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }} className="glass-card mb-6 p-5">
+      {/* Current health radar */}
+      <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.08 }} className="glass-card mb-6 p-5">
+        <h3 className="mb-1 font-semibold">{t("result.status")}</h3>
+        <p className="mb-3 text-xs text-muted-foreground">{lastDiag?.name} · {lastScan?.date}</p>
+        <div className="h-52">
+          <ResponsiveContainer width="100%" height="100%">
+            <RadarChart data={radarData} margin={{ top: 0, right: 20, bottom: 0, left: 20 }}>
+              <PolarGrid stroke="hsl(var(--border))" />
+              <PolarAngleAxis dataKey="metric" tick={{ fontSize: 12, fill: "hsl(var(--muted-foreground))" }} />
+              <PolarRadiusAxis domain={[0, 100]} tick={false} axisLine={false} />
+              <Radar name="score" dataKey="value" stroke="hsl(var(--secondary))" fill="hsl(var(--secondary))" fillOpacity={0.25} dot={{ r: 4, fill: "hsl(var(--secondary))" }} />
+              <Tooltip contentStyle={{ backgroundColor: "hsl(var(--card))", border: "1px solid hsl(var(--border))", borderRadius: "0.75rem", fontSize: "12px" }} />
+            </RadarChart>
+          </ResponsiveContainer>
+        </div>
+        {lastScan && (
+          <div className="mt-1 grid grid-cols-3 gap-2 text-center text-xs">
+            <div><span className="font-semibold text-secondary">{lastScan.metrics.balans}</span><br /><span className="text-muted-foreground">{t("metric.balance")}</span></div>
+            <div><span className="font-semibold" style={{ color: "hsl(var(--warm))" }}>{lastScan.metrics.energi}</span><br /><span className="text-muted-foreground">{t("metric.energy")}</span></div>
+            <div><span className="font-semibold" style={{ color: "hsl(var(--ring))" }}>{lastScan.metrics.flode}</span><br /><span className="text-muted-foreground">{t("metric.flow")}</span></div>
+          </div>
+        )}
+      </motion.div>
+
+      {/* Progression line chart */}
+      <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.12 }} className="glass-card mb-6 p-5">
         <h3 className="mb-4 font-semibold">{t("history.progression")}</h3>
         <div className="h-48">
           <ResponsiveContainer width="100%" height="100%">
@@ -158,7 +207,7 @@ const HistoryPage = () => {
         </div>
       </motion.div>
 
-      {/* Comparison */}
+      {/* Comparison: first vs latest */}
       {firstDiag && lastDiag && firstScan !== lastScan && (
         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.15 }} className="glass-card mb-6 p-5">
           <h3 className="mb-3 font-semibold">{t("history.comparison")}</h3>
@@ -177,30 +226,48 @@ const HistoryPage = () => {
         </motion.div>
       )}
 
-      {/* Timeline */}
+      {/* Timeline with trend indicators */}
       <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2 }}>
         <h3 className="mb-3 font-semibold">{t("history.timeline")}</h3>
         <div className="space-y-3">
-          {[...scans].reverse().map((scan, i) => {
+          {reversedScans.map((scan, i) => {
             const diag = getDiagnosis(scan.diagnosisId);
+            const prev = reversedScans[i + 1];
             return (
               <motion.div key={scan.id} initial={{ opacity: 0, x: -10 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: 0.25 + i * 0.05 }} className="glass-card flex items-center gap-4 p-4">
-                <div className="flex h-10 w-10 items-center justify-center rounded-full bg-secondary/20 text-secondary font-bold text-sm">
+                <div className="flex h-10 w-10 items-center justify-center rounded-full bg-secondary/20 text-secondary font-bold text-sm shrink-0">
                   {scan.date.slice(8)}
                 </div>
-                <div className="flex-1">
-                  <p className="font-medium">{diag.name}</p>
+                <div className="flex-1 min-w-0">
+                  <p className="font-medium truncate">{diag.name}</p>
                   <p className="text-xs text-muted-foreground">{scan.date}</p>
                 </div>
-                <div className="text-right text-xs text-muted-foreground">
-                  <p>B: {scan.metrics.balans}%</p>
-                  <p>E: {scan.metrics.energi}%</p>
+                <div className="text-right text-xs text-muted-foreground space-y-0.5 shrink-0">
+                  <div className="flex items-center justify-end gap-1">
+                    <span className="text-secondary font-medium">{scan.metrics.balans}</span>
+                    <TrendIcon current={scan.metrics.balans} prev={prev?.metrics.balans} />
+                  </div>
+                  <div className="flex items-center justify-end gap-1">
+                    <span style={{ color: "hsl(var(--warm))" }} className="font-medium">{scan.metrics.energi}</span>
+                    <TrendIcon current={scan.metrics.energi} prev={prev?.metrics.energi} />
+                  </div>
+                  <div className="flex items-center justify-end gap-1">
+                    <span style={{ color: "hsl(var(--ring))" }} className="font-medium">{scan.metrics.flode}</span>
+                    <TrendIcon current={scan.metrics.flode} prev={prev?.metrics.flode} />
+                  </div>
                 </div>
               </motion.div>
             );
           })}
         </div>
       </motion.div>
+
+      <div className="mt-6">
+        <Button onClick={() => navigate("/scanner")} className="w-full rounded-xl bg-secondary py-6 text-base font-semibold text-secondary-foreground">
+          <ScanLine className="mr-2 h-5 w-5" />
+          {t("history.newScan")}
+        </Button>
+      </div>
     </div>
   );
 };
