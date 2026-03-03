@@ -199,4 +199,78 @@ export const en: Record<string, string> = {
   "day.fri": "Fri",
   "day.sat": "Sat",
   "day.sun": "Sun",
+
+  // Plan-ready banner
+  "banner.planReady": "Your plan for today is ready",
+  "banner.openPlan": "Open plan",
+
+  // Home — empty state
+  "home.emptyTitle": "Welcome to Element 5 Lab",
+  "home.emptySubtitle": "Take a quick tongue photo and receive a personalized 7-day plan based on traditional Chinese medicine.",
+  "home.emptyHint": "No registration needed to get started",
+  "home.benefit1": "Analyze your tongue in 30 seconds with AI",
+  "home.benefit2": "Receive your personal health status based on TCM",
+  "home.benefit3": "Follow your 7-day plan with food, exercise and routines",
+
+  // Home — has-scan state
+  "home.greetingName": "Welcome back, {name}",
+  "home.continuePlan": "Continue your plan for today",
+  "home.planDaysLeft": "{days} days left in your 7-day plan",
+
+  // Scanner — how it works
+  "scanner.howItWorks": "How it works",
+  "scanner.step1": "Photograph your tongue in good light",
+  "scanner.step2": "Our AI analyzes patterns and color",
+  "scanner.step3": "You receive your personalized health plan instantly",
+
+  // Scanner — extended tip descriptions
+  "scanner.tipLightDetail": "Natural or bright indoor light works best",
+  "scanner.tipNoColorDetail": "Wait 30 minutes after eating",
+  "scanner.tipTongueDetail": "Keep your tongue relaxed and extended",
+
+  // Scanner — demo profiles friendlier label
+  "scanner.demoProfilesLabel": "Not ready? Try a sample result",
+
+  // Scanner — inline file error
+  "scanner.fileTooLarge": "Image is too large (max 5 MB)",
+  "scanner.fileTooLargeHint": "Choose a smaller image or take a new photo",
+
+  // Scanner — analyzing step messages
+  "scanner.analyzingStep1": "Preparing your scan...",
+  "scanner.analyzingStep2": "Analyzing patterns and color...",
+  "scanner.analyzingStep3": "Creating your personalized plan...",
+  "scanner.analyzingEncourage": "It only takes a moment — we're almost done",
+
+  // Scanner — per-diagnosis demo hints
+  "demo.low-energy.hint": "If you feel tired and low on energy",
+  "demo.metabolic.hint": "If your digestion feels sluggish",
+  "demo.inner-stress.hint": "If you carry inner stress and anxiety",
+  "demo.tension.hint": "If you have aches and tension",
+  "demo.cold-circulation.hint": "If you feel cold and fatigued",
+
+  // Result
+  "result.tcmContext": "TCM context",
+
+  // Plan — inline (ScannerPage)
+  "plan.goToFullPlan": "Open full plan",
+  "plan.seeFullPlan": "See your full plan",
+
+  // Plan — PlanPage
+  "plan.backToDiagnosis": "Back to diagnosis",
+  "plan.todayFocus": "Your focus today",
+  "plan.allDoneToday": "Well done — all done for today!",
+  "plan.nextScanLabel": "Recommended next scan:",
+  "plan.newScanCta": "Take a new scan",
+
+  // Onboarding
+  "onboarding.stepOf": "Step {step} of {total}",
+  "onboarding.welcomePersonal": "Hi! Tell us about yourself",
+  "onboarding.whyAge": "Helps us give age-appropriate advice",
+  "onboarding.whyGender": "Gives more relevant health recommendations",
+  "onboarding.privacyNote": "This is private and only visible to you. We never share your information.",
+  "onboarding.goalEnergiDesc": "Boost your natural vitality and stamina",
+  "onboarding.goalSomnDesc": "Sleep deeper and wake refreshed",
+  "onboarding.goalMatsmaltningDesc": "Support your digestion and gut health",
+  "onboarding.goalRorlighetDesc": "Flexibility, mobility and peace of mind",
+  "onboarding.goalStressDesc": "Manage stress and find balance",
 };

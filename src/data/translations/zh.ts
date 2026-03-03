@@ -199,4 +199,78 @@ export const zh: Record<string, string> = {
   "day.fri": "五",
   "day.sat": "六",
   "day.sun": "日",
+
+  // Plan-ready banner
+  "banner.planReady": "你今天的方案已准备好",
+  "banner.openPlan": "查看方案",
+
+  // Home — empty state
+  "home.emptyTitle": "欢迎使用 Element 5 Lab",
+  "home.emptySubtitle": "拍摄一张舌头照片，获取基于中医的7天个性化健康方案。",
+  "home.emptyHint": "无需注册即可开始",
+  "home.benefit1": "30秒内用AI分析你的舌象",
+  "home.benefit2": "获得基于中医的个人健康状态",
+  "home.benefit3": "跟随包含饮食、运动和日常习惯的7天方案",
+
+  // Home — has-scan state
+  "home.greetingName": "欢迎回来，{name}",
+  "home.continuePlan": "继续今天的方案",
+  "home.planDaysLeft": "7天方案还剩 {days} 天",
+
+  // Scanner — how it works
+  "scanner.howItWorks": "使用步骤",
+  "scanner.step1": "在充足光线下拍摄舌头照片",
+  "scanner.step2": "AI分析舌象特征和颜色",
+  "scanner.step3": "立即获得你的个性化健康方案",
+
+  // Scanner — extended tip descriptions
+  "scanner.tipLightDetail": "自然光或明亮室内灯光最佳",
+  "scanner.tipNoColorDetail": "饮食后等待30分钟",
+  "scanner.tipTongueDetail": "放松地伸出舌头",
+
+  // Scanner — demo profiles friendlier label
+  "scanner.demoProfilesLabel": "还没准备好？尝试一个示例结果",
+
+  // Scanner — inline file error
+  "scanner.fileTooLarge": "图片太大（最大5MB）",
+  "scanner.fileTooLargeHint": "请选择较小的图片或重新拍照",
+
+  // Scanner — analyzing step messages
+  "scanner.analyzingStep1": "正在准备你的扫描...",
+  "scanner.analyzingStep2": "正在分析舌象特征和颜色...",
+  "scanner.analyzingStep3": "正在生成你的个性化方案...",
+  "scanner.analyzingEncourage": "只需片刻——马上就好",
+
+  // Scanner — per-diagnosis demo hints
+  "demo.low-energy.hint": "如果你感到疲惫、精力不足",
+  "demo.metabolic.hint": "如果你的消化感觉迟缓",
+  "demo.inner-stress.hint": "如果你承受着内在压力和焦虑",
+  "demo.tension.hint": "如果你有酸痛和紧张感",
+  "demo.cold-circulation.hint": "如果你感到畏寒和疲乏",
+
+  // Result
+  "result.tcmContext": "中医背景",
+
+  // Plan — inline (ScannerPage)
+  "plan.goToFullPlan": "打开完整方案",
+  "plan.seeFullPlan": "查看完整方案",
+
+  // Plan — PlanPage
+  "plan.backToDiagnosis": "返回诊断",
+  "plan.todayFocus": "今日重点",
+  "plan.allDoneToday": "做得好——今天全部完成！",
+  "plan.nextScanLabel": "建议下次扫描时间：",
+  "plan.newScanCta": "进行新扫描",
+
+  // Onboarding
+  "onboarding.stepOf": "第 {step} 步，共 {total} 步",
+  "onboarding.welcomePersonal": "你好！告诉我们关于你的情况",
+  "onboarding.whyAge": "帮助我们提供适合年龄的建议",
+  "onboarding.whyGender": "提供更有针对性的健康建议",
+  "onboarding.privacyNote": "这是私密信息，只有你可以看到。我们绝不分享你的信息。",
+  "onboarding.goalEnergiDesc": "提升你的自然活力和体力",
+  "onboarding.goalSomnDesc": "睡得更深、醒来精神充沛",
+  "onboarding.goalMatsmaltningDesc": "支持消化和肠道健康",
+  "onboarding.goalRorlighetDesc": "灵活性、活动能力和内心平静",
+  "onboarding.goalStressDesc": "管理压力，找到平衡",
 };

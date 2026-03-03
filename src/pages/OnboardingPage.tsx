@@ -6,6 +6,8 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { ChevronRight, ChevronLeft, Sparkles } from "lucide-react";
 
+const capitalize = (s: string) => s.charAt(0).toUpperCase() + s.slice(1);
+
 const OnboardingPage = () => {
   const { updateProfile } = useAuth();
   const { t } = useLanguage();
@@ -75,10 +77,16 @@ const OnboardingPage = () => {
   return (
     <div className="flex min-h-screen items-center justify-center bg-background px-4">
       <div className="w-full max-w-md">
-        <div className="mb-8 flex gap-2">
-          {Array.from({ length: totalSteps }).map((_, i) => (
-            <div key={i} className={`h-1.5 flex-1 rounded-full transition-colors ${i <= step ? "bg-secondary" : "bg-muted"}`} />
-          ))}
+        <div className="mb-8">
+          <div className="mb-2 flex justify-between text-sm">
+            <span className="font-medium">{t("onboarding.stepOf").replace("{step}", String(step + 1)).replace("{total}", String(totalSteps))}</span>
+            <span className="text-muted-foreground">{Math.round(((step + 1) / totalSteps) * 100)}%</span>
+          </div>
+          <div className="flex gap-1.5">
+            {Array.from({ length: totalSteps }).map((_, i) => (
+              <div key={i} className={`h-2 flex-1 rounded-full transition-colors ${i <= step ? "bg-secondary" : "bg-muted"}`} />
+            ))}
+          </div>
         </div>
 
         <AnimatePresence mode="wait">
@@ -92,7 +100,8 @@ const OnboardingPage = () => {
                   <Input value={name} onChange={(e) => setName(e.target.value)} placeholder={t("onboarding.namePlaceholder")} className="rounded-xl" />
                 </div>
                 <div>
-                  <label className="mb-1.5 block text-sm font-medium">{t("onboarding.ageGroup")}</label>
+                  <label className="mb-1 block text-sm font-medium">{t("onboarding.ageGroup")}</label>
+                  <p className="mb-2 text-xs text-muted-foreground">{t("onboarding.whyAge")}</p>
                   <div className="flex flex-wrap gap-2">
                     {AGE_RANGES.map((a) => (
                       <button key={a} onClick={() => setAgeRange(a)} className={`rounded-xl border px-4 py-2 text-sm transition-all ${ageRange === a ? "border-secondary bg-secondary text-secondary-foreground" : "border-border bg-card hover:border-secondary/50"}`}>{a}</button>
@@ -100,7 +109,8 @@ const OnboardingPage = () => {
                   </div>
                 </div>
                 <div>
-                  <label className="mb-1.5 block text-sm font-medium">{t("onboarding.gender")}</label>
+                  <label className="mb-1 block text-sm font-medium">{t("onboarding.gender")}</label>
+                  <p className="mb-2 text-xs text-muted-foreground">{t("onboarding.whyGender")}</p>
                   <div className="flex gap-2">
                     {GENDERS.map((g) => (
                       <button key={g.key} onClick={() => { setGender(g.key); if (g.key !== "Kvinna") setHasMenstruation(null); }} className={`flex-1 rounded-xl border px-4 py-2.5 text-sm font-medium transition-all ${gender === g.key ? "border-secondary bg-secondary text-secondary-foreground" : "border-border bg-card hover:border-secondary/50"}`}>{g.value}</button>
@@ -117,6 +127,10 @@ const OnboardingPage = () => {
               <p className="mb-6 text-sm text-muted-foreground">{t("onboarding.womensHealthInfo")}</p>
               <div>
                 <label className="mb-3 block text-sm font-medium">{t("onboarding.menstruation")}</label>
+                <div className="mb-4 flex items-start gap-2 rounded-xl bg-muted/50 px-4 py-3">
+                  <span className="text-base">🔒</span>
+                  <p className="text-sm text-muted-foreground">{t("onboarding.privacyNote")}</p>
+                </div>
                 <div className="flex gap-3">
                   {[{ value: true, label: t("onboarding.yes") }, { value: false, label: t("onboarding.no") }].map((opt) => (
                     <button key={String(opt.value)} onClick={() => setHasMenstruation(opt.value)} className={`flex-1 rounded-xl border px-4 py-4 text-sm font-medium transition-all ${hasMenstruation === opt.value ? "border-secondary bg-secondary text-secondary-foreground" : "border-border bg-card hover:border-secondary/50"}`}>{opt.label}</button>
@@ -134,8 +148,11 @@ const OnboardingPage = () => {
                 {HEALTH_GOALS.map((goal) => (
                   <button key={goal.id} onClick={() => toggleGoal(goal.id)} className={`flex w-full items-center gap-3 rounded-xl border p-4 text-left transition-all ${healthGoals.includes(goal.id) ? "border-secondary bg-secondary/10" : "border-border bg-card hover:border-secondary/50"}`}>
                     <span className="text-xl">{goal.emoji}</span>
-                    <span className="font-medium">{goal.label}</span>
-                    {healthGoals.includes(goal.id) && <Sparkles className="ml-auto h-4 w-4 text-secondary" />}
+                    <div className="flex-1">
+                      <p className="font-medium">{goal.label}</p>
+                      <p className="text-xs text-muted-foreground mt-0.5">{t(`onboarding.goal${capitalize(goal.id)}Desc`)}</p>
+                    </div>
+                    {healthGoals.includes(goal.id) && <Sparkles className="ml-auto h-4 w-4 text-secondary shrink-0" />}
                   </button>
                 ))}
               </div>

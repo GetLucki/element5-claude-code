@@ -1,19 +1,29 @@
+import { useState } from "react";
 import { useHealth } from "@/context/HealthContext";
 import { useAuth } from "@/context/AuthContext";
 import { useLanguage } from "@/context/LanguageContext";
 import { useNavigate } from "react-router-dom";
-import { UtensilsCrossed, Pill, Snowflake, CalendarClock, CheckCircle2, Circle, Dumbbell, Moon, Heart } from "lucide-react";
+import { UtensilsCrossed, Pill, Snowflake, CalendarClock, CheckCircle2, Circle, Dumbbell, Moon, Heart, ChevronLeft, Sun, ScanLine } from "lucide-react";
 import TcmTerm from "@/components/TcmTerm";
 import TcmRichText from "@/components/TcmRichText";
 import { motion } from "framer-motion";
 import { differenceInDays } from "date-fns";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
+import { Button } from "@/components/ui/button";
 
 const PlanPage = () => {
   const { currentScan, getDiagnosis, checklist, toggleCheckItem } = useHealth();
   const { profile } = useAuth();
   const { t } = useLanguage();
   const navigate = useNavigate();
+
+  const [firstVisit] = useState(() => {
+    if (!localStorage.getItem("plan-page-seen")) {
+      localStorage.setItem("plan-page-seen", "1");
+      return true;
+    }
+    return false;
+  });
 
   const DAYS = [t("day.mon"), t("day.tue"), t("day.wed"), t("day.thu"), t("day.fri"), t("day.sat"), t("day.sun")];
   const SECTION_ANCHORS = [
@@ -48,9 +58,30 @@ const PlanPage = () => {
   return (
     <div className="px-4 pt-6 md:pt-10">
       <motion.div initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }}>
+        <button onClick={() => navigate(-1)} className="mb-3 flex items-center gap-1 text-sm text-muted-foreground hover:text-foreground transition-colors">
+          <ChevronLeft className="h-4 w-4" />{t("plan.backToDiagnosis")}
+        </button>
         <h1 className="mb-1 text-2xl font-bold">{t("plan.title")}</h1>
         <p className="mb-1 text-sm text-muted-foreground">{t("plan.basedOn")}: {diagnosis.name} — <span className="italic">{diagnosis.tcmName}</span></p>
         <p className="mb-4 text-sm text-muted-foreground"><TcmTerm termKey="tungdiagnostik">TCM</TcmTerm> — {t("plan.tcmPrinciple")}</p>
+      </motion.div>
+
+      {/* Today's Focus card */}
+      <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.04 }} className="mb-5 rounded-2xl bg-secondary/10 border border-secondary/30 p-5">
+        <div className="flex items-center gap-2 mb-3">
+          <Sun className="h-5 w-5 text-secondary" />
+          <h3 className="font-semibold">{t("plan.todayFocus")}</h3>
+        </div>
+        {allItems.slice(0, 3).map((item) => {
+          const currentDay = Math.min(daysSinceScan, 6);
+          const isChecked = checklist[currentDay]?.[item] || false;
+          return (
+            <button key={item} onClick={() => toggleCheckItem(currentDay, item)} className="flex w-full items-center gap-3 py-2 text-left text-sm transition-colors hover:opacity-80">
+              {isChecked ? <CheckCircle2 className="h-5 w-5 text-success shrink-0" /> : <Circle className="h-5 w-5 text-secondary shrink-0" />}
+              <span className={isChecked ? "line-through text-muted-foreground" : "font-medium"}>{item}</span>
+            </button>
+          );
+        })}
       </motion.div>
 
       <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.05 }} className="mb-5 flex gap-2 overflow-x-auto pb-1">
@@ -115,7 +146,7 @@ const PlanPage = () => {
 
       {/* Secondary accordion */}
       <motion.div id="plan-more" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.23 }}>
-        <Accordion type="multiple" className="space-y-3">
+        <Accordion type="multiple" defaultValue={firstVisit ? ["routines", "biohacks"] : []} className="space-y-3">
           <AccordionItem value="routines" className="glass-card border-none px-5 pt-3 pb-0">
             <AccordionTrigger className="py-2 hover:no-underline">
               <div className="flex items-center gap-2"><Moon className="h-5 w-5 text-ring" /><span className="font-semibold">{t("plan.routines")}</span></div>
@@ -188,6 +219,27 @@ const PlanPage = () => {
             );
           })}
         </div>
+        {allItems.length > 0 && allItems.every((i) => checklist[Math.min(daysSinceScan, 6)]?.[i]) && (
+          <motion.div
+            initial={{ opacity: 0, scale: 0.9 }}
+            animate={{ opacity: 1, scale: 1 }}
+            className="mt-4 flex items-center justify-center gap-2 rounded-2xl bg-success/10 border border-success/30 py-4"
+          >
+            <CheckCircle2 className="h-6 w-6 text-success" />
+            <p className="font-semibold text-success">{t("plan.allDoneToday")}</p>
+          </motion.div>
+        )}
+      </motion.div>
+
+      {/* What next footer */}
+      <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.35 }} className="glass-card mb-8 p-5 text-center">
+        <p className="text-sm text-muted-foreground mb-1">{t("plan.nextScanLabel")}</p>
+        <p className="text-base font-semibold mb-4">
+          {new Date(Date.now() + daysLeft * 86400000).toLocaleDateString(undefined, { weekday: "long", month: "long", day: "numeric" })}
+        </p>
+        <Button onClick={() => navigate("/scanner")} variant="outline" className="rounded-xl border-secondary/50 text-secondary hover:bg-secondary/10">
+          <ScanLine className="mr-2 h-4 w-4" />{t("plan.newScanCta")}
+        </Button>
       </motion.div>
     </div>
   );

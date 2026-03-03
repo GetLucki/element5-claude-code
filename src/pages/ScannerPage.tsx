@@ -4,7 +4,8 @@ import { useAuth } from "@/context/AuthContext";
 import { useLanguage } from "@/context/LanguageContext";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { Camera, Upload, ScanLine, Video, X, Activity, Battery, Waves, UtensilsCrossed, Pill, Snowflake, ChevronRight, ChevronDown, History, CheckCircle2, Circle, CalendarClock, Dumbbell, Moon, ShieldAlert, Heart, AlertCircle, Info, Sun, Droplets } from "lucide-react";
+import { Camera, Upload, ScanLine, Video, X, Activity, Battery, Waves, UtensilsCrossed, Pill, Snowflake, ChevronRight, ChevronDown, History, CheckCircle2, Circle, CalendarClock, Dumbbell, Moon, ShieldAlert, Heart, AlertCircle, Info, Sun, Droplets, ClipboardList } from "lucide-react";
+import { cn } from "@/lib/utils";
 import TcmTerm from "@/components/TcmTerm";
 import TcmRichText from "@/components/TcmRichText";
 import { motion, AnimatePresence } from "framer-motion";
@@ -15,6 +16,31 @@ import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/component
 import { differenceInDays } from "date-fns";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
+
+// Step-by-step progress during analysis
+const AnalyzingSteps = () => {
+  const { t } = useLanguage();
+  const steps = [t("scanner.analyzingStep1"), t("scanner.analyzingStep2"), t("scanner.analyzingStep3")];
+  const [currentStep, setCurrentStep] = useState(0);
+  useEffect(() => {
+    const interval = setInterval(() => setCurrentStep((p) => Math.min(p + 1, steps.length - 1)), 1000);
+    return () => clearInterval(interval);
+  }, []);
+  return (
+    <div className="space-y-3 text-left">
+      {steps.map((step, i) => (
+        <div key={i} className={cn("flex items-center gap-3 text-sm transition-all duration-300", i < currentStep ? "text-secondary" : i === currentStep ? "text-foreground font-medium" : "text-muted-foreground/40")}>
+          {i < currentStep ? (
+            <CheckCircle2 className="h-5 w-5 text-secondary shrink-0" />
+          ) : (
+            <Circle className={cn("h-5 w-5 shrink-0", i === currentStep ? "text-secondary" : "text-muted-foreground/30")} />
+          )}
+          {step}
+        </div>
+      ))}
+    </div>
+  );
+};
 
 const DEMO_PROFILES: { id: DiagnosisId; emoji: string }[] = [
   { id: "low-energy", emoji: "🔋" },
@@ -39,6 +65,7 @@ const ScannerPage = () => {
   const [customMetrics, setCustomMetrics] = useState<{ balans: number; energi: number; flode: number } | null>(null);
   const [likelySymptoms, setLikelySymptoms] = useState<string[]>([]);
   const [preview, setPreview] = useState<string | null>(null);
+  const [uploadError, setUploadError] = useState<string | null>(null);
   const [showWebcam, setShowWebcam] = useState(false);
   const videoRef = useRef<HTMLVideoElement>(null);
   const streamRef = useRef<MediaStream | null>(null);
@@ -117,7 +144,16 @@ const ScannerPage = () => {
 
   const handleFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
-    if (file) { const reader = new FileReader(); reader.onload = () => setPreview(reader.result as string); reader.readAsDataURL(file); }
+    if (!file) return;
+    if (file.size > 5 * 1024 * 1024) {
+      setUploadError(t("scanner.fileTooLarge"));
+      e.target.value = "";
+      return;
+    }
+    setUploadError(null);
+    const reader = new FileReader();
+    reader.onload = () => setPreview(reader.result as string);
+    reader.readAsDataURL(file);
   };
 
   const startAnalysis = (profileId: DiagnosisId) => {
@@ -186,7 +222,20 @@ const ScannerPage = () => {
         {/* UPLOAD */}
         {phase === "upload" && (
           <motion.div key="upload" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
-            <h1 className="mb-6 text-2xl font-bold md:text-3xl">{t("scanner.title")}</h1>
+            <h1 className="mb-4 text-2xl font-bold md:text-3xl">{t("scanner.title")}</h1>
+
+            {/* How it works — 3-step explainer */}
+            <div className="mb-6 rounded-2xl border border-border/50 bg-card/60 p-4">
+              <p className="mb-3 text-sm font-semibold">{t("scanner.howItWorks")}</p>
+              <div className="space-y-2">
+                {[t("scanner.step1"), t("scanner.step2"), t("scanner.step3")].map((step, i) => (
+                  <div key={i} className="flex items-center gap-3">
+                    <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-secondary text-xs font-bold text-secondary-foreground">{i + 1}</span>
+                    <p className="text-sm text-muted-foreground">{step}</p>
+                  </div>
+                ))}
+              </div>
+            </div>
 
             {showWebcam && (
               <div className="glass-card mb-6 overflow-hidden p-0 relative">
@@ -211,30 +260,53 @@ const ScannerPage = () => {
             )}
 
             {!preview && !showWebcam && (
-              <div className="mb-6 flex flex-col items-center justify-center rounded-2xl border-2 border-dashed border-border/70 bg-card/50 p-10 md:p-14">
-                <div className="mb-4 flex h-20 w-20 items-center justify-center rounded-full bg-muted"><Camera className="h-8 w-8 text-muted-foreground" /></div>
-                <p className="mb-2 font-semibold">{t("scanner.uploadPhoto")}</p>
-                <p className="mb-4 text-center text-sm text-muted-foreground">{t("scanner.uploadHint")}</p>
-                <div className="mb-5 flex flex-wrap justify-center gap-2 text-xs text-muted-foreground">
-                  <span className="flex items-center gap-1 rounded-full bg-muted/60 px-3 py-1"><Sun className="h-3 w-3" />{t("scanner.tipLight")}</span>
-                  <span className="flex items-center gap-1 rounded-full bg-muted/60 px-3 py-1"><Droplets className="h-3 w-3" />{t("scanner.tipNoColor")}</span>
-                  <span className="flex items-center gap-1 rounded-full bg-muted/60 px-3 py-1">{t("scanner.tipTongue")}</span>
+              <div className="mb-6">
+                {/* Camera tips as readable cards */}
+                <div className="mb-4 space-y-2">
+                  {[
+                    { Icon: Sun, label: t("scanner.tipLight"), detail: t("scanner.tipLightDetail") },
+                    { Icon: Droplets, label: t("scanner.tipNoColor"), detail: t("scanner.tipNoColorDetail") },
+                    { Icon: Camera, label: t("scanner.tipTongue"), detail: t("scanner.tipTongueDetail") },
+                  ].map(({ Icon, label, detail }) => (
+                    <div key={label} className="flex items-center gap-3 rounded-xl bg-muted/40 px-4 py-3">
+                      <Icon className="h-4 w-4 text-secondary shrink-0" />
+                      <div>
+                        <p className="text-sm font-medium">{label}</p>
+                        <p className="text-xs text-muted-foreground">{detail}</p>
+                      </div>
+                    </div>
+                  ))}
                 </div>
-                <div className="flex flex-wrap justify-center gap-3">
-                  <Button variant="outline" className="rounded-xl" onClick={() => fileInputRef.current?.click()}><Upload className="mr-2 h-4 w-4" />{t("scanner.choosePhoto")}</Button>
-                  {isMobile ? (
-                    <Button variant="outline" className="rounded-xl" onClick={() => cameraInputRef.current?.click()}><Camera className="mr-2 h-4 w-4" />{t("scanner.takePhoto")}</Button>
-                  ) : (
-                    <Button variant="outline" className="rounded-xl" onClick={startWebcam}><Video className="mr-2 h-4 w-4" />{t("scanner.webcam")}</Button>
+                {/* Upload / camera buttons */}
+                <div className="flex flex-col items-center justify-center rounded-2xl border-2 border-dashed border-border/70 bg-card/50 p-8">
+                  <div className="mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-muted"><Camera className="h-7 w-7 text-muted-foreground" /></div>
+                  <p className="mb-1 font-semibold">{t("scanner.uploadPhoto")}</p>
+                  <p className="mb-4 text-center text-sm text-muted-foreground">{t("scanner.uploadHint")}</p>
+                  <div className="flex flex-wrap justify-center gap-3">
+                    <Button variant="outline" className="rounded-xl" onClick={() => fileInputRef.current?.click()}><Upload className="mr-2 h-4 w-4" />{t("scanner.choosePhoto")}</Button>
+                    {isMobile ? (
+                      <Button variant="outline" className="rounded-xl" onClick={() => cameraInputRef.current?.click()}><Camera className="mr-2 h-4 w-4" />{t("scanner.takePhoto")}</Button>
+                    ) : (
+                      <Button variant="outline" className="rounded-xl" onClick={startWebcam}><Video className="mr-2 h-4 w-4" />{t("scanner.webcam")}</Button>
+                    )}
+                  </div>
+                  {uploadError && (
+                    <div className="mt-4 flex items-start gap-2 w-full rounded-xl bg-destructive/10 border border-destructive/30 px-4 py-3">
+                      <AlertCircle className="h-4 w-4 text-destructive shrink-0 mt-0.5" />
+                      <div>
+                        <p className="text-sm font-medium text-destructive">{uploadError}</p>
+                        <p className="text-xs text-muted-foreground mt-0.5">{t("scanner.fileTooLargeHint")}</p>
+                      </div>
+                    </div>
                   )}
                 </div>
               </div>
             )}
 
 
-            <Collapsible defaultOpen={isGuest} className="mb-4">
+            <Collapsible defaultOpen={true} className="mb-4">
               <CollapsibleTrigger className="flex w-full items-center justify-between rounded-xl bg-muted/50 px-4 py-3 text-sm font-medium text-muted-foreground hover:bg-muted/70 transition-colors">
-                <span>{t("scanner.demoProfiles")}</span>
+                <span>{t("scanner.demoProfilesLabel")}</span>
                 <ChevronDown className="h-4 w-4" />
               </CollapsibleTrigger>
               <CollapsibleContent>
@@ -246,7 +318,7 @@ const ScannerPage = () => {
                         <span className="text-2xl">{p.emoji}</span>
                         <div>
                           <p className="font-medium">{diag.name}</p>
-                          <p className="text-xs text-muted-foreground">{diag.description.slice(0, 60)}...</p>
+                          <p className="text-xs text-muted-foreground">{t(`demo.${p.id}.hint`)}</p>
                         </div>
                       </button>
                     );
@@ -259,16 +331,17 @@ const ScannerPage = () => {
 
         {/* ANALYZING */}
         {phase === "analyzing" && (
-          <motion.div key="analyzing" initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0 }} className="flex min-h-[60vh] flex-col items-center justify-center text-center">
-            <div className="relative mb-6">
-              <div className="flex h-24 w-24 items-center justify-center rounded-full bg-secondary/20"><ScanLine className="h-10 w-10 text-secondary animate-pulse-glow" /></div>
+          <motion.div key="analyzing" initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0 }} className="flex min-h-[60vh] flex-col items-center justify-center px-4">
+            <div className="relative mb-8">
+              <div className="flex h-28 w-28 items-center justify-center rounded-full bg-secondary/20">
+                <ScanLine className="h-12 w-12 text-secondary animate-pulse" />
+              </div>
               <div className="absolute inset-0 rounded-full border-2 border-secondary/30 animate-ping" />
             </div>
-            <h2 className="mb-2 text-xl font-bold">{t("scanner.analyzing")}</h2>
-            <p className="text-sm text-muted-foreground"><TcmTerm termKey="tungdiagnostik">{t("scanner.analyzingDesc")}</TcmTerm></p>
-            <div className="mt-6 flex gap-1">
-              {[0, 1, 2].map((i) => <motion.div key={i} className="h-2 w-2 rounded-full bg-secondary" animate={{ opacity: [0.3, 1, 0.3] }} transition={{ duration: 1.2, repeat: Infinity, delay: i * 0.3 }} />)}
+            <div className="w-full max-w-xs mb-6">
+              <AnalyzingSteps />
             </div>
+            <p className="text-sm text-muted-foreground italic text-center">{t("scanner.analyzingEncourage")}</p>
           </motion.div>
         )}
 
@@ -276,16 +349,21 @@ const ScannerPage = () => {
         {phase === "result" && diagnosis && (
           <motion.div key="result" initial={{ opacity: 0, x: 40 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -40 }} transition={{ duration: 0.35 }}>
             <h1 className="mb-6 text-2xl font-bold md:text-3xl">{t("result.title")}</h1>
+            {/* Diagnosis card — plain language first, TCM second */}
             <div className="mb-6 rounded-2xl bg-midnight p-5 text-midnight-foreground">
               <p className="mb-1 text-xs uppercase tracking-wider text-midnight-foreground/80">{t("result.status")}</p>
-              <h2 className="mb-1 text-xl font-bold">{diagnosis.name}</h2>
-              <div className="flex items-center gap-2 mb-1">
-                <p className="text-sm font-medium text-midnight-foreground/80">{diagnosis.tcmName}</p>
-                <Popover><PopoverTrigger asChild><button type="button" className="inline-flex"><Info className="h-4 w-4 text-midnight-foreground/60 hover:text-midnight-foreground transition-colors" /></button></PopoverTrigger>
-                  <PopoverContent className="w-80 p-4" side="bottom" align="start"><p className="font-bold text-foreground mb-1">{diagnosis.tcmName}</p><p className="text-sm text-muted-foreground leading-relaxed">{diagnosis.statusExplanation}</p></PopoverContent>
-                </Popover>
+              <h2 className="mb-2 text-xl font-bold">{diagnosis.name}</h2>
+              <p className="mb-4 text-sm text-midnight-foreground/90 leading-relaxed">{diagnosis.subtitle}</p>
+              {/* TCM context — clearly labeled as secondary */}
+              <div className="border-t border-midnight-foreground/20 pt-3 mb-3">
+                <p className="mb-1 text-xs uppercase tracking-wider text-midnight-foreground/60">{t("result.tcmContext")}</p>
+                <div className="flex items-center gap-2">
+                  <p className="text-sm font-medium text-midnight-foreground/80">{diagnosis.tcmName}</p>
+                  <Popover><PopoverTrigger asChild><button type="button" className="inline-flex"><Info className="h-4 w-4 text-midnight-foreground/60 hover:text-midnight-foreground transition-colors" /></button></PopoverTrigger>
+                    <PopoverContent className="w-80 p-4" side="bottom" align="start"><p className="font-bold text-foreground mb-1">{diagnosis.tcmName}</p><p className="text-sm text-muted-foreground leading-relaxed">{diagnosis.statusExplanation}</p></PopoverContent>
+                  </Popover>
+                </div>
               </div>
-              <p className="text-sm text-midnight-foreground/90 mb-3">{diagnosis.subtitle}</p>
               <p className="text-sm text-midnight-foreground/80 leading-relaxed"><TcmRichText text={diagnosis.description} variant="light" /></p>
             </div>
 
@@ -317,27 +395,21 @@ const ScannerPage = () => {
             })()}
 
             <p className="mb-3 text-center text-sm text-muted-foreground italic">{t("result.planReady")}</p>
-            <Button onClick={() => setPhase("plan")} className="w-full rounded-2xl bg-secondary py-6 text-base font-semibold text-secondary-foreground shadow-lg hover:bg-secondary/90">
-              {t("result.showPlan")}<ChevronRight className="ml-2 h-5 w-5" />
+            <Button onClick={() => setPhase("plan")} className="w-full rounded-2xl bg-secondary py-7 text-lg font-bold text-secondary-foreground shadow-xl hover:bg-secondary/90 hover:shadow-2xl transition-all">
+              {t("result.showPlan")}<ChevronRight className="ml-2 h-6 w-6" />
             </Button>
-
-            {/* Signup nudge for guests */}
-            {isGuest && (
-              <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.3 }} className="mt-4 rounded-2xl border border-secondary/30 bg-secondary/5 p-4 text-center">
-                <p className="text-sm font-medium mb-1">{t("guest.nudgeTitle")}</p>
-                <p className="text-xs text-muted-foreground mb-3">{t("guest.nudgeDesc")}</p>
-                <Button onClick={() => navigate("/login")} variant="outline" className="rounded-xl border-secondary/40 text-secondary hover:bg-secondary/10">
-                  {t("guest.signUp")}
-                </Button>
-              </motion.div>
-            )}
           </motion.div>
         )}
 
         {/* PLAN */}
         {phase === "plan" && diagnosis && (
           <motion.div key="plan" initial={{ opacity: 0, x: 40 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -40 }} transition={{ duration: 0.35 }}>
-            <h1 className="mb-2 text-2xl font-bold md:text-3xl">{t("plan.scannerTitle")}</h1>
+            <div className="mb-4 flex items-center justify-between">
+              <h1 className="text-2xl font-bold md:text-3xl">{t("plan.scannerTitle")}</h1>
+              <button onClick={() => navigate("/plan")} className="text-sm font-medium text-secondary hover:underline transition-colors">
+                {t("plan.goToFullPlan")} →
+              </button>
+            </div>
             <p className="mb-6 text-sm text-muted-foreground">{t("plan.scannerSubtitle")}</p>
 
             <div className="glass-card mb-4 p-5">
@@ -441,20 +513,24 @@ const ScannerPage = () => {
               );
             })()}
 
-            <Button onClick={() => { if (previousScans && !isGuest) setPhase("history"); else navigate("/"); }} className="w-full rounded-2xl bg-secondary py-6 text-base font-semibold text-secondary-foreground shadow-lg hover:bg-secondary/90">
-              {previousScans && !isGuest ? <>{t("plan.seeHistory")}<ChevronRight className="ml-2 h-5 w-5" /></> : t("plan.done")}
-            </Button>
-
-            {/* Signup nudge for guests */}
-            {isGuest && (
-              <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.3 }} className="mt-4 rounded-2xl border border-secondary/30 bg-secondary/5 p-4 text-center">
-                <p className="text-sm font-medium mb-1">{t("guest.nudgeTitle")}</p>
-                <p className="text-xs text-muted-foreground mb-3">{t("guest.nudgeDesc")}</p>
-                <Button onClick={() => navigate("/login")} variant="outline" className="rounded-xl border-secondary/40 text-secondary hover:bg-secondary/10">
+            <div className="space-y-3">
+              <Button onClick={() => navigate("/plan")} className="w-full rounded-2xl bg-secondary py-6 text-base font-semibold text-secondary-foreground shadow-lg hover:bg-secondary/90">
+                <ClipboardList className="mr-2 h-5 w-5" />{t("plan.seeFullPlan")}<ChevronRight className="ml-2 h-5 w-5" />
+              </Button>
+              {previousScans && !isGuest && (
+                <button onClick={() => setPhase("history")} className="w-full py-2 text-sm text-muted-foreground hover:text-foreground transition-colors">
+                  {t("result.step.history")} →
+                </button>
+              )}
+              {isGuest && (
+                <button onClick={() => navigate("/login")} className="w-full py-2 text-sm text-secondary hover:underline transition-colors">
                   {t("guest.signUp")}
-                </Button>
-              </motion.div>
-            )}
+                </button>
+              )}
+              <button onClick={() => navigate("/")} className="w-full py-2 text-sm text-muted-foreground hover:text-foreground transition-colors">
+                {t("plan.done")}
+              </button>
+            </div>
           </motion.div>
         )}
 

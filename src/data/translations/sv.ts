@@ -199,4 +199,78 @@ export const sv: Record<string, string> = {
   "day.fri": "Fre",
   "day.sat": "Lör",
   "day.sun": "Sön",
+
+  // Plan-ready banner
+  "banner.planReady": "Din plan för idag är redo",
+  "banner.openPlan": "Öppna planen",
+
+  // Home — empty state
+  "home.emptyTitle": "Välkommen till Element 5 Lab",
+  "home.emptySubtitle": "Ta en snabb tungbild och få en personlig 7-dagarsplan baserad på traditionell kinesisk medicin.",
+  "home.emptyHint": "Ingen registrering krävs för att komma igång",
+  "home.benefit1": "Analysera din tunga på 30 sekunder med AI",
+  "home.benefit2": "Få din personliga hälsostatus baserad på TCM",
+  "home.benefit3": "Följ din 7-dagarsplan med mat, träning och rutiner",
+
+  // Home — has-scan state
+  "home.greetingName": "Välkommen tillbaka, {name}",
+  "home.continuePlan": "Fortsätt din plan för idag",
+  "home.planDaysLeft": "{days} dagar kvar av din 7-dagarsplan",
+
+  // Scanner — how it works
+  "scanner.howItWorks": "Så här fungerar det",
+  "scanner.step1": "Fotografera din tunga i bra ljus",
+  "scanner.step2": "Vår AI analyserar mönster och färg",
+  "scanner.step3": "Du får din personliga hälsoplan direkt",
+
+  // Scanner — extended tip descriptions
+  "scanner.tipLightDetail": "Naturligt eller starkt rumsljus fungerar bäst",
+  "scanner.tipNoColorDetail": "Vänta 30 minuter efter måltid",
+  "scanner.tipTongueDetail": "Håll tungan avslappnad och utsträckt",
+
+  // Scanner — demo profiles friendlier label
+  "scanner.demoProfilesLabel": "Inte redo? Testa ett exempelresultat",
+
+  // Scanner — inline file error
+  "scanner.fileTooLarge": "Bilden är för stor (max 5 MB)",
+  "scanner.fileTooLargeHint": "Välj en mindre bild eller ta ett nytt foto",
+
+  // Scanner — analyzing step messages
+  "scanner.analyzingStep1": "Förbereder din scanning...",
+  "scanner.analyzingStep2": "Analyserar mönster och färg...",
+  "scanner.analyzingStep3": "Skapar din personliga plan...",
+  "scanner.analyzingEncourage": "Det tar bara ett ögonblick — vi är nästan klara",
+
+  // Scanner — per-diagnosis demo hints
+  "demo.low-energy.hint": "Om du känner dig trött och energilös",
+  "demo.metabolic.hint": "Om matsmältningen känns trög",
+  "demo.inner-stress.hint": "Om du bär på inre stress och oro",
+  "demo.tension.hint": "Om du har värk och spänningar",
+  "demo.cold-circulation.hint": "Om du känner dig kall och trött",
+
+  // Result
+  "result.tcmContext": "TCM-kontext",
+
+  // Plan — inline (ScannerPage)
+  "plan.goToFullPlan": "Öppna hela planen",
+  "plan.seeFullPlan": "Se din fullständiga plan",
+
+  // Plan — PlanPage
+  "plan.backToDiagnosis": "Tillbaka till diagnosen",
+  "plan.todayFocus": "Ditt fokus idag",
+  "plan.allDoneToday": "Bra jobbat — allt klart för idag!",
+  "plan.nextScanLabel": "Rekommenderad nästa scanning:",
+  "plan.newScanCta": "Gör en ny scanning",
+
+  // Onboarding
+  "onboarding.stepOf": "Steg {step} av {total}",
+  "onboarding.welcomePersonal": "Hej! Berätta lite om dig",
+  "onboarding.whyAge": "Hjälper oss ge åldersanpassade råd",
+  "onboarding.whyGender": "Ger mer relevanta hälsorekommendationer",
+  "onboarding.privacyNote": "Detta är privat och syns bara för dig. Vi delar aldrig din information.",
+  "onboarding.goalEnergiDesc": "Öka din naturliga vitalitet och ork",
+  "onboarding.goalSomnDesc": "Sov djupare och vakna utvilad",
+  "onboarding.goalMatsmaltningDesc": "Stöd din matsmältning och tarmhälsa",
+  "onboarding.goalRorlighetDesc": "Flexibilitet, rörlighet och sinnesro",
+  "onboarding.goalStressDesc": "Hantera stress och hitta balans",
 };
