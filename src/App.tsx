@@ -14,6 +14,7 @@ import HistoryPage from "./pages/HistoryPage";
 import ProfilePage from "./pages/ProfilePage";
 import LoginPage from "./pages/LoginPage";
 import NotFound from "./pages/NotFound";
+import WelcomePage from "./pages/WelcomePage";
 
 const queryClient = new QueryClient();
 
@@ -27,17 +28,25 @@ const App = () => {
           <LanguageProvider>
             <AuthProvider>
               <HealthProvider>
-                <AppLayout>
-                  <Routes>
-                    <Route path="/" element={<Index />} />
-                    <Route path="/scanner" element={<ScannerPage />} />
-                    <Route path="/plan" element={<PlanPage />} />
-                    <Route path="/history" element={<HistoryPage />} />
-                    <Route path="/profile" element={<ProfilePage />} />
-                    <Route path="/login" element={<LoginPage />} />
-                    <Route path="*" element={<NotFound />} />
-                  </Routes>
-                </AppLayout>
+                <Routes>
+                  {/* Welcome is OUTSIDE AppLayout — no bottom nav chrome */}
+                  <Route path="/welcome" element={<WelcomePage />} />
+
+                  {/* All other routes inside AppLayout */}
+                  <Route path="/*" element={
+                    <AppLayout>
+                      <Routes>
+                        <Route path="/" element={<Index />} />
+                        <Route path="/scanner" element={<ScannerPage />} />
+                        <Route path="/plan" element={<PlanPage />} />
+                        <Route path="/history" element={<HistoryPage />} />
+                        <Route path="/profile" element={<ProfilePage />} />
+                        <Route path="/login" element={<LoginPage />} />
+                        <Route path="*" element={<NotFound />} />
+                      </Routes>
+                    </AppLayout>
+                  } />
+                </Routes>
               </HealthProvider>
             </AuthProvider>
           </LanguageProvider>

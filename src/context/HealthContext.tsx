@@ -82,15 +82,21 @@ export const HealthProvider = ({ children }: { children: ReactNode }) => {
 
   useEffect(() => {
     if (isGuest) {
-      // Pre-load a demo scan so guests see data on all pages
-      const demoScenario = SCENARIOS["low-energy"];
-      const demoScan: ScanResult = {
-        id: "guest-demo",
-        date: new Date().toISOString().slice(0, 10),
-        diagnosisId: "low-energy",
-        metrics: { balans: demoScenario.metrics.balans, energi: demoScenario.metrics.energi, flode: demoScenario.metrics.flode },
-      };
-      setScans([demoScan]);
+      const hasSeenWelcome = localStorage.getItem("has-seen-welcome");
+      if (hasSeenWelcome) {
+        // Returning guest: pre-load demo scan so all pages have data to display
+        const demoScenario = SCENARIOS["low-energy"];
+        const demoScan: ScanResult = {
+          id: "guest-demo",
+          date: new Date().toISOString().slice(0, 10),
+          diagnosisId: "low-energy",
+          metrics: { balans: demoScenario.metrics.balans, energi: demoScenario.metrics.energi, flode: demoScenario.metrics.flode },
+        };
+        setScans([demoScan]);
+      } else {
+        // Fresh first-time user: empty state — they haven't scanned yet
+        setScans([]);
+      }
       setLoading(false);
       return;
     }

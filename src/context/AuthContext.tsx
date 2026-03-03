@@ -90,16 +90,26 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         setIsGuest(false);
         loadProfile(session.user.id);
       } else {
-        // Auto-enter guest mode with dummy profile
+        // Auto-enter guest mode — read quick-setup from welcome flow if available
         setIsGuest(true);
+        let guestName: string | null = null;
+        let guestGoals: string[] = [];
+        try {
+          const stored = localStorage.getItem("guest-quick-setup");
+          if (stored) {
+            const parsed = JSON.parse(stored);
+            guestName = parsed.name?.trim() || null;
+            guestGoals = Array.isArray(parsed.goals) ? parsed.goals : [];
+          }
+        } catch { /* malformed JSON — ignore */ }
         setProfile({
           id: "guest",
-          name: null,
+          name: guestName,
           avatar_url: null,
           age_range: null,
           gender: null,
           has_menstruation: null,
-          health_goals: [],
+          health_goals: guestGoals,
           onboarding_completed: true,
         });
       }
@@ -141,14 +151,24 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
   const enterGuestMode = () => {
     setIsGuest(true);
+    let guestName: string | null = null;
+    let guestGoals: string[] = [];
+    try {
+      const stored = localStorage.getItem("guest-quick-setup");
+      if (stored) {
+        const parsed = JSON.parse(stored);
+        guestName = parsed.name?.trim() || null;
+        guestGoals = Array.isArray(parsed.goals) ? parsed.goals : [];
+      }
+    } catch { /* ignore */ }
     setProfile({
       id: "guest",
-      name: "Gäst",
+      name: guestName,
       avatar_url: null,
       age_range: null,
       gender: null,
       has_menstruation: null,
-      health_goals: [],
+      health_goals: guestGoals,
       onboarding_completed: true,
     });
     setLoading(false);

@@ -1,7 +1,7 @@
 import { useHealth } from "@/context/HealthContext";
 import { useAuth } from "@/context/AuthContext";
 import { useLanguage } from "@/context/LanguageContext";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Navigate } from "react-router-dom";
 import { Battery, Activity, Waves, TrendingUp, ScanLine, Calendar, Info, ClipboardList } from "lucide-react";
 import TcmTerm from "@/components/TcmTerm";
 import { Button } from "@/components/ui/button";
@@ -11,9 +11,14 @@ import { motion } from "framer-motion";
 
 const Index = () => {
   const { currentScan, getDiagnosis, scans } = useHealth();
-  const { profile } = useAuth();
+  const { profile, user, loading: authLoading } = useAuth();
   const { t } = useLanguage();
   const navigate = useNavigate();
+
+  // First-time guest redirect: go to welcome flow
+  if (!authLoading && !user && !localStorage.getItem("has-seen-welcome")) {
+    return <Navigate to="/welcome" replace />;
+  }
 
   const METRIC_EXPLANATIONS: Record<string, { title: string; description: string }> = {
     [t("metric.balance")]: { title: t("metric.balance.title"), description: t("metric.balance.desc") },
