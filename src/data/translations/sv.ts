@@ -1,7 +1,7 @@
 export const sv: Record<string, string> = {
   // App
   "app.name": "Element 5 Lab",
-  "app.tagline": "Den västerländska drömmen, upplåst med den österländska kartan.",
+  "app.tagline": "Den västerländska drömmen — upplåst med den österländska visdomens karta.",
   "app.version": "Element 5 Lab v1.0",
 
   // Nav
@@ -13,8 +13,8 @@ export const sv: Record<string, string> = {
 
   // Login
   "login.title": "Element 5 Lab",
-  "login.pitch": "Lås upp din livskraft.",
-  "login.subtitle": "Vi använder den österländska kartan för att låsa upp den västerländska drömmen — funktionell livslängd genom de fem faserna.",
+  "login.pitch": "Väck din inre livskraft.",
+  "login.subtitle": "Med TCM:s fem element som kompass guidar vi dig mot bättre hälsa, mer energi och ett längre, mer vitalt liv.",
   "login.email": "E-postadress",
   "login.password": "Lösenord",
   "login.name": "Ditt namn",
@@ -25,7 +25,7 @@ export const sv: Record<string, string> = {
   "login.apple": "Logga in med Apple",
   "login.switchToSignUp": "Inget konto? Skapa ett",
   "login.switchToSignIn": "Har redan ett konto? Logga in",
-  "login.guestMode": "Testa utan konto",
+  "login.guestMode": "Prova utan konto",
   "login.emailSent": "Kolla din e-post för att verifiera kontot!",
   "login.errorCredentials": "Fel e-post eller lösenord",
   "login.errorGoogle": "Google-inloggning misslyckades",
@@ -56,7 +56,7 @@ export const sv: Record<string, string> = {
   "onboarding.healthFocusInfo": "Vad vill du förbättra? Välj ett eller flera.",
   "onboarding.back": "Tillbaka",
   "onboarding.continue": "Fortsätt",
-  "onboarding.start": "Starta din resa",
+  "onboarding.start": "Sätt igång min resa",
   "onboarding.saving": "Sparar...",
   "onboarding.goalEnergy": "Energi",
   "onboarding.goalSleep": "Sömn",
@@ -123,15 +123,15 @@ export const sv: Record<string, string> = {
   // Plan
   "plan.title": "Din Veckoplan",
   "plan.basedOn": "Baserad på",
-  "plan.tcmPrinciple": "TCM-princip: behandla roten, inte bara symptomen",
+  "plan.tcmPrinciple": "TCM-principen: behandla orsaken — inte bara symptomen",
   "plan.scannerTitle": "Din Åtgärdsplan",
-  "plan.scannerSubtitle": "Baserad på TCM-principen: behandla roten, inte bara symptomen",
+  "plan.scannerSubtitle": "Baserad på TCM-principen: behandla orsaken — inte bara symptomen",
   "plan.jumpFood": "Kost",
   "plan.jumpTraining": "Träning",
   "plan.jumpSupplements": "Tillskott",
   "plan.jumpMore": "Mer...",
   "plan.newScanIn": "Ny scanning om {days} dagar",
-  "plan.followPlan": "Följ planen för bästa resultat",
+  "plan.followPlan": "Följ din plan — varje dag räknas",
   "plan.food": "Kost — Mat som Medicin",
   "plan.eatMore": "Ät mer av",
   "plan.avoid": "Undvik",
@@ -172,7 +172,7 @@ export const sv: Record<string, string> = {
   "history.firstScan": "Första Scan",
   "history.latestScan": "Senaste Scan",
   "history.timeline": "Tidslinjen",
-  "history.guestGate": "Logga in eller skapa ett konto för att följa din hälsoresa över tid och se dina framsteg.",
+  "history.guestGate": "Logga in för att följa din hälsoresa — och se hur mycket du förbättras vecka för vecka.",
 
   // Profile
   "profile.title": "Profil",
@@ -188,8 +188,8 @@ export const sv: Record<string, string> = {
   "guest.signUpCta": "Skapa konto för att spara",
   "guest.signUp": "Skapa konto",
   "guest.onlyDemo": "I gästläge kan du testa med demoprofiler.",
-  "guest.nudgeTitle": "Vill du spara dina resultat?",
-  "guest.nudgeDesc": "Skapa ett gratis konto för att spara dina framsteg, följa historik och få personliga planer över tid.",
+  "guest.nudgeTitle": "Spara din hälsoresa",
+  "guest.nudgeDesc": "Skapa ett kostnadsfritt konto och följ hur din hälsa förbättras — vecka för vecka.",
 
   // Days
   "day.mon": "Mån",
@@ -206,11 +206,11 @@ export const sv: Record<string, string> = {
 
   // Home — empty state
   "home.emptyTitle": "Välkommen till Element 5 Lab",
-  "home.emptySubtitle": "Ta en snabb tungbild och få en personlig 7-dagarsplan baserad på traditionell kinesisk medicin.",
-  "home.emptyHint": "Ingen registrering krävs för att komma igång",
-  "home.benefit1": "Analysera din tunga på 30 sekunder med AI",
-  "home.benefit2": "Få din personliga hälsostatus baserad på TCM",
-  "home.benefit3": "Följ din 7-dagarsplan med mat, träning och rutiner",
+  "home.emptySubtitle": "Fotografera din tunga och få en personlig 7-dagarsplan grundad i tusenårig TCM-visdom.",
+  "home.emptyHint": "Ingen registrering krävs — kom igång direkt",
+  "home.benefit1": "Scanna din tunga på 30 sekunder med AI",
+  "home.benefit2": "Få din TCM-diagnos och personliga hälsostatus",
+  "home.benefit3": "Följ din 7-dagarsplan med kost, rörelse och biohacks",
 
   // Home — has-scan state
   "home.greetingName": "Välkommen tillbaka, {name}",
@@ -275,24 +275,24 @@ export const sv: Record<string, string> = {
   "onboarding.goalStressDesc": "Hantera stress och hitta balans",
 
   // Welcome flow (förstagångsanvändare)
-  "welcome.splash.headline": "Din hälsa i balans, enligt österlandets urgamla visdom.",
-  "welcome.splash.subtitle": "Traditionell kinesisk medicin möter modern vetenskap — för dig som vill leva med full vitalitet.",
+  "welcome.splash.headline": "Lev fullt ut — med österlandets urålduriga visdom som guide.",
+  "welcome.splash.subtitle": "Traditionell kinesisk medicin möter modern vetenskap. En hälsokompass för dig som vill ta kontroll.",
   "welcome.splash.cta": "Kom igång",
   "welcome.splash.skip": "Hoppa över",
   "welcome.how.title": "Tre enkla steg",
-  "welcome.how.subtitle": "Din tungbild berättar mer än du tror.",
+  "welcome.how.subtitle": "Din tunga är en spegel — och den avslöjar mer än du tror.",
   "welcome.how.step1.title": "Fotografera din tunga",
-  "welcome.how.step1.desc": "30 sekunder i bra ljus — det är allt som krävs.",
+  "welcome.how.step1.desc": "30 sekunder i bra ljus. Det är allt som krävs.",
   "welcome.how.step2.title": "AI analyserar ditt mönster",
-  "welcome.how.step2.desc": "Baserat på 2 000 år av TCM-diagnostik, moderniserat med AI.",
+  "welcome.how.step2.desc": "Tusentals år av TCM-diagnostik — nu möjliggjort av modern AI.",
   "welcome.how.step3.title": "Få din personliga 7-dagarsplan",
-  "welcome.how.step3.desc": "Mat, träning, tillskott och rutiner — anpassat just för dig.",
+  "welcome.how.step3.desc": "Kost, träning, tillskott och biohacks — skräddarsytt för just dig.",
   "welcome.how.trust": "Ingen registrering krävs  •  Din data stannar hos dig",
   "welcome.how.cta": "Fortsätt",
   "welcome.setup.nameTitle": "Hej! Vad heter du?",
   "welcome.setup.namePlaceholder": "Förnamn (valfritt)",
   "welcome.setup.goalsTitle": "Vad vill du förbättra?",
-  "welcome.setup.goalsHint": "Valfritt — du kan ändra detta senare",
+  "welcome.setup.goalsHint": "Valfritt — du kan ändra detta när som helst",
   "welcome.setup.cta": "Starta min scanning",
   "welcome.back": "Tillbaka",
 };

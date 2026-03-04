@@ -13,8 +13,8 @@ export const en: Record<string, string> = {
 
   // Login
   "login.title": "Element 5 Lab",
-  "login.pitch": "Unlock your vital force.",
-  "login.subtitle": "We use the ancient Eastern map to unlock the Western dream — functional longevity through the Five Phases.",
+  "login.pitch": "Awaken your vital force.",
+  "login.subtitle": "Using TCM's five elements as a compass, we guide you toward better health, more energy, and lasting vitality.",
   "login.email": "Email address",
   "login.password": "Password",
   "login.name": "Your name",
@@ -56,7 +56,7 @@ export const en: Record<string, string> = {
   "onboarding.healthFocusInfo": "What would you like to improve? Select one or more.",
   "onboarding.back": "Back",
   "onboarding.continue": "Continue",
-  "onboarding.start": "Start your journey",
+  "onboarding.start": "Begin my journey",
   "onboarding.saving": "Saving...",
   "onboarding.goalEnergy": "Energy",
   "onboarding.goalSleep": "Sleep",
@@ -123,15 +123,15 @@ export const en: Record<string, string> = {
   // Plan
   "plan.title": "Your Weekly Plan",
   "plan.basedOn": "Based on",
-  "plan.tcmPrinciple": "TCM principle: treat the root, not just the symptoms",
+  "plan.tcmPrinciple": "TCM principle: treat the cause, not just the symptoms",
   "plan.scannerTitle": "Your Action Plan",
-  "plan.scannerSubtitle": "Based on the TCM principle: treat the root, not just the symptoms",
+  "plan.scannerSubtitle": "TCM principle: treat the cause, not just the symptoms",
   "plan.jumpFood": "Food",
   "plan.jumpTraining": "Training",
   "plan.jumpSupplements": "Supplements",
   "plan.jumpMore": "More...",
   "plan.newScanIn": "Next scan in {days} days",
-  "plan.followPlan": "Follow the plan for best results",
+  "plan.followPlan": "Follow your plan — every day counts",
   "plan.food": "Food — Food as Medicine",
   "plan.eatMore": "Eat more of",
   "plan.avoid": "Avoid",
@@ -172,7 +172,7 @@ export const en: Record<string, string> = {
   "history.firstScan": "First Scan",
   "history.latestScan": "Latest Scan",
   "history.timeline": "Timeline",
-  "history.guestGate": "Sign in or create an account to track your health journey over time and see your progress.",
+  "history.guestGate": "Sign in to track your health journey — and see how much you improve week by week.",
 
   // Profile
   "profile.title": "Profile",
@@ -188,8 +188,8 @@ export const en: Record<string, string> = {
   "guest.signUpCta": "Create an account to save",
   "guest.signUp": "Create account",
   "guest.onlyDemo": "In guest mode you can try demo profiles.",
-  "guest.nudgeTitle": "Want to save your results?",
-  "guest.nudgeDesc": "Create a free account to save your progress, track history, and get personalized plans over time.",
+  "guest.nudgeTitle": "Save your health journey",
+  "guest.nudgeDesc": "Create a free account and watch your health improve — week by week.",
 
   // Days
   "day.mon": "Mon",
@@ -206,11 +206,11 @@ export const en: Record<string, string> = {
 
   // Home — empty state
   "home.emptyTitle": "Welcome to Element 5 Lab",
-  "home.emptySubtitle": "Take a quick tongue photo and receive a personalized 7-day plan based on traditional Chinese medicine.",
-  "home.emptyHint": "No registration needed to get started",
-  "home.benefit1": "Analyze your tongue in 30 seconds with AI",
-  "home.benefit2": "Receive your personal health status based on TCM",
-  "home.benefit3": "Follow your 7-day plan with food, exercise and routines",
+  "home.emptySubtitle": "Photograph your tongue and receive a personalized 7-day plan rooted in 2,000 years of TCM wisdom.",
+  "home.emptyHint": "No registration needed — start right now",
+  "home.benefit1": "Scan your tongue in 30 seconds with AI",
+  "home.benefit2": "Get your TCM diagnosis and personal health status",
+  "home.benefit3": "Follow your 7-day plan with food, movement and biohacks",
 
   // Home — has-scan state
   "home.greetingName": "Welcome back, {name}",
@@ -275,24 +275,24 @@ export const en: Record<string, string> = {
   "onboarding.goalStressDesc": "Manage stress and find balance",
 
   // Welcome flow (first-time users)
-  "welcome.splash.headline": "Your health in balance, guided by the East's ancient wisdom.",
-  "welcome.splash.subtitle": "Traditional Chinese medicine meets modern science — for those who want to live with full vitality.",
+  "welcome.splash.headline": "Live fully — guided by the ancient wisdom of the East.",
+  "welcome.splash.subtitle": "Traditional Chinese medicine meets modern science. A health compass for those ready to take control.",
   "welcome.splash.cta": "Get started",
   "welcome.splash.skip": "Skip",
   "welcome.how.title": "Three simple steps",
-  "welcome.how.subtitle": "Your tongue reveals more than you think.",
+  "welcome.how.subtitle": "Your tongue is a mirror — and it reveals more than you think.",
   "welcome.how.step1.title": "Photograph your tongue",
-  "welcome.how.step1.desc": "30 seconds in good light — that's all it takes.",
+  "welcome.how.step1.desc": "30 seconds in good light. That's all it takes.",
   "welcome.how.step2.title": "AI analyzes your pattern",
-  "welcome.how.step2.desc": "Based on 2,000 years of TCM diagnostics, modernized with AI.",
+  "welcome.how.step2.desc": "Thousands of years of TCM diagnostics, now powered by modern AI.",
   "welcome.how.step3.title": "Get your personalized 7-day plan",
-  "welcome.how.step3.desc": "Food, exercise, supplements and routines — tailored just for you.",
+  "welcome.how.step3.desc": "Food, movement, supplements and biohacks — tailored just for you.",
   "welcome.how.trust": "No registration required  •  Your data stays with you",
   "welcome.how.cta": "Continue",
   "welcome.setup.nameTitle": "Hi! What's your name?",
   "welcome.setup.namePlaceholder": "First name (optional)",
   "welcome.setup.goalsTitle": "What would you like to improve?",
-  "welcome.setup.goalsHint": "Optional — you can change this later",
+  "welcome.setup.goalsHint": "Optional — you can change this any time",
   "welcome.setup.cta": "Start my scan",
   "welcome.back": "Back",
 };

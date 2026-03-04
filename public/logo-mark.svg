@@ -1,23 +1,16 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 300" fill="none">
   <defs>
-    <!-- Gold gradient: light top-left → dark mid → lighter bottom-right (bevel illusion) -->
-    <linearGradient id="gold" x1="76" y1="49" x2="224" y2="275" gradientUnits="userSpaceOnUse">
-      <stop offset="0%"   stop-color="#F2C85A"/>
-      <stop offset="30%"  stop-color="#D49430"/>
-      <stop offset="60%"  stop-color="#A87024"/>
-      <stop offset="100%" stop-color="#DCAA40"/>
-    </linearGradient>
-    <!-- Subtle gold glow (outer glow on strokes) -->
-    <filter id="goldGlow" x="-12%" y="-12%" width="124%" height="124%">
-      <feGaussianBlur in="SourceGraphic" stdDeviation="2.5" result="blur"/>
+    <!-- Subtle line glow for depth -->
+    <filter id="lg" x="-10%" y="-10%" width="120%" height="120%">
+      <feGaussianBlur in="SourceGraphic" stdDeviation="1.8" result="blur"/>
       <feMerge>
         <feMergeNode in="blur"/>
         <feMergeNode in="SourceGraphic"/>
       </feMerge>
     </filter>
-    <!-- Cyan sparkle glow -->
-    <filter id="cyanGlow" x="-120%" y="-120%" width="340%" height="340%">
-      <feGaussianBlur in="SourceGraphic" stdDeviation="6" result="blur"/>
+    <!-- Stronger glow for the centre sparkle -->
+    <filter id="sg" x="-150%" y="-150%" width="400%" height="400%">
+      <feGaussianBlur in="SourceGraphic" stdDeviation="8" result="blur"/>
       <feMerge>
         <feMergeNode in="blur"/>
         <feMergeNode in="SourceGraphic"/>
@@ -26,39 +19,41 @@
   </defs>
 
   <!--
-    Pentagon vertices (R=125, cx=150, cy=150, point-down / flat-top):
-    V0 bottom:       150.0, 275.0
-    V1 right:        268.9, 188.6
-    V2 upper-right:  223.5,  48.9
-    V3 upper-left:    76.5,  48.9
-    V4 left:          31.1, 188.6
+    Pentagon vertices — POINT UP, flat bottom (R=125, cx=150, cy=150):
+    V0 top:          150.0,  25.0
+    V1 upper-right:  268.9, 111.4
+    V2 lower-right:  223.5, 251.1
+    V3 lower-left:    76.5, 251.1
+    V4 upper-left:    31.1, 111.4
+    Centroid: (150, 150)
   -->
 
-  <!-- Pentagram: connect every-other vertex V0→V2→V4→V1→V3→V0 -->
+  <!-- Pentagram: V0→V2→V4→V1→V3 (every-other vertex, creates the star) -->
   <polygon
-    points="150,275 223.5,48.9 31.1,188.6 268.9,188.6 76.5,48.9"
-    stroke="url(#gold)" stroke-width="11" stroke-linejoin="miter" stroke-miterlimit="10"
-    filter="url(#goldGlow)"
+    points="150,25 223.5,251.1 31.1,111.4 268.9,111.4 76.5,251.1"
+    stroke="white" stroke-width="10" stroke-opacity="0.88"
+    stroke-linejoin="miter" stroke-miterlimit="10"
+    filter="url(#lg)"
   />
 
-  <!-- Pentagon outline (drawn on top so corners look sharp) -->
+  <!-- Pentagon outline -->
   <polygon
-    points="150,275 268.9,188.6 223.5,48.9 76.5,48.9 31.1,188.6"
-    stroke="url(#gold)" stroke-width="11" stroke-linejoin="miter" stroke-miterlimit="10"
-    filter="url(#goldGlow)"
+    points="150,25 268.9,111.4 223.5,251.1 76.5,251.1 31.1,111.4"
+    stroke="white" stroke-width="10" stroke-opacity="0.88"
+    stroke-linejoin="miter" stroke-miterlimit="10"
+    filter="url(#lg)"
   />
 
-  <!-- Cyan radial halo behind sparkle -->
-  <circle cx="150" cy="150" r="32" fill="#00C8E8" opacity="0.12"/>
-  <circle cx="150" cy="150" r="20" fill="#00D8F4" opacity="0.20"/>
+  <!-- Faint dark mask behind sparkle so it reads above the crossing lines -->
+  <circle cx="150" cy="150" r="16" fill="black" fill-opacity="0.25"/>
 
-  <!-- 4-pointed sparkle star (tips: top±28 vertical, ±25 horizontal; inner waist: ±3px at 45°) -->
+  <!-- 4-pointed sparkle (tips: ±28 vertical, ±25 horizontal; inner waist ±3 at 45°) -->
   <path
     d="M 150,122 L 153,147 L 175,150 L 153,153 L 150,178 L 147,153 L 125,150 L 147,147 Z"
-    fill="#46E6F8"
-    filter="url(#cyanGlow)"
+    fill="white"
+    filter="url(#sg)"
   />
 
   <!-- Bright centre dot -->
-  <circle cx="150" cy="150" r="3.5" fill="white" opacity="0.95"/>
+  <circle cx="150" cy="150" r="4" fill="white"/>
 </svg>
