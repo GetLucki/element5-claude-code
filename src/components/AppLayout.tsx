@@ -63,8 +63,11 @@ const AppLayout = ({ children }: { children: ReactNode }) => {
   return (
     <div className="min-h-screen bg-background pb-20 md:pb-0 md:flex overflow-x-hidden">
       <aside className="hidden md:flex md:w-64 md:flex-col md:fixed md:inset-y-0 md:border-r md:border-border md:bg-card">
-        <div className="flex h-16 items-center px-6">
-          <h1 className="text-xl font-bold text-secondary">Element 5 Lab</h1>
+        <div className="flex h-16 items-center gap-3 px-6">
+          <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-[hsl(var(--midnight))] shadow-md">
+            <img src="/logo-mark.svg" alt="" className="h-7 w-7" />
+          </div>
+          <h1 className="text-xl font-bold">Element 5 Lab</h1>
         </div>
         <BottomNav variant="sidebar" />
       </aside>

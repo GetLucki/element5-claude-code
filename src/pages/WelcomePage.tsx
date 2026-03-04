@@ -38,7 +38,7 @@ const SplashStep = ({ direction, onNext, onSkip, t }: {
       transition={{ delay: 0.1, duration: 0.5 }}
       className="mb-8 flex h-24 w-24 items-center justify-center rounded-3xl border border-white/10 bg-white/5 shadow-2xl"
     >
-      <span className="text-4xl font-bold text-secondary">5</span>
+      <img src="/logo-mark.svg" alt="Element 5 Lab" className="h-16 w-16" />
     </motion.div>
 
     {/* App name */}
